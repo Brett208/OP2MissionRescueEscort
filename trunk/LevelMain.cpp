@@ -5,7 +5,6 @@
 ExportLevelDetails("6 Player, LastOne, '<map name>' map", "on6_01.map", "MULTITEK.TXT", MultiLastOneStanding, 6)
 
 
-// Holder for global script variables (for Saved game files)
 struct ScriptGlobal
 {
 };
