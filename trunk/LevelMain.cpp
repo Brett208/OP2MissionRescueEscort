@@ -1,5 +1,5 @@
-#include <Outpost2DLL.h>	// Main Outpost 2 header to interface with the game
-#include <OP2Helper.h>		// Optional header to make level building easier
+#include <Outpost2DLL/Outpost2DLL.h>	// Main Outpost 2 header to interface with the game
+#include <OP2Helper/OP2Helper.h>		// Optional header to make level building easier
 
 // Required data exports  (Description, Map, TechTree, GameType, NumPlayers)
 ExportLevelDetails("6 Player, LastOne, '<map name>' map", "on6_01.map", "MULTITEK.TXT", MultiLastOneStanding, 6)
