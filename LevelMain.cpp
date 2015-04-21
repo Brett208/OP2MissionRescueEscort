@@ -3,13 +3,13 @@
 
 
 // Required data exports  (Description, Map, TechTree, GameType, NumPlayers)
-ExportLevelDetails("6 Player, LastOne, '<map name>' map", "on6_01.map", "MULTITEK.TXT", MultiLastOneStanding, 6)
+ExportLevelDetails("6 Player, LastOne, '<map name>' map", "on6_01.map", "MULTITEK.TXT", MultiLastOneStanding, 6);
 
 
 struct ScriptGlobal
 {
-};
-ScriptGlobal scriptGlobal;
+} scriptGlobal;
+ExportSaveLoadData(scriptGlobal);
 
 
 Export int InitProc()
@@ -18,19 +18,5 @@ Export int InitProc()
 }
 
 
-Export void AIProc() 
-{
-}
-
-Export void __cdecl GetSaveRegions(BufferDesc& bufferDesc)
-{
-	// Buffer for Saved Game files
-	bufferDesc.bufferStart = &scriptGlobal;
-	bufferDesc.length = sizeof(scriptGlobal);
-}
-
-Export void NoResponseToTrigger()
-{
-}
-
-
+Export void AIProc() {}		// Required function export, usually empty
+Export void NoResponseToTrigger() {}	// Optional function export, supposed to be empty
