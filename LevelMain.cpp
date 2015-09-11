@@ -3,7 +3,7 @@
 
 
 // Required data exports  (Description, Map, TechTree, GameType, NumPlayers)
-ExportLevelDetails("6 Player, LastOne, '<map name>' map", "on6_01.map", "MULTITEK.TXT", MultiLastOneStanding, 6);
+ExportLevelDetails("6P, LoS, '<map name>'", "on6_01.map", "MULTITEK.TXT", MultiLastOneStanding, 6);
 
 
 struct ScriptGlobal
