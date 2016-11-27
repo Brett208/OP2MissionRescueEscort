@@ -6,7 +6,6 @@
 #include "Outpost2DLL\Outpost2DLL.h"
 #include <vector>
 
-
 //Note: Currently only PlayerBuildingEnum returns buildings, so do not try and use this class to count buildings.
 namespace UnitHelper
 {

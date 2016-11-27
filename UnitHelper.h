@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <functional>
-
 #include "OP2Helper\OP2Helper.h"
 #include "HFL\Source\HFL.h"
 #include "Outpost2DLL\Outpost2DLL.h"
+
+#include <vector>
+#include <functional>
 
 namespace UnitHelper
 {

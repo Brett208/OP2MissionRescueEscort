@@ -59,7 +59,9 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) ..\..\..\..\GameDownload\Outpost2\trunk\</Command>
+      <Command>copy $(TargetPath) ..\..\..\..\GameDownload\Outpost2\trunk\
+copy /Y "$(ProjectDir)RescueEscort.map" "..\..\..\..\GameDownload\Outpost2\trunk\RescueEscort.map"
+rem copy /Y "$(ProjectDir)MULTITEK.TXT" "..\..\..\..\GameDownload\Outpost2\trunk\MULTITEK.TXT"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying DLL to game folder</Message>
@@ -82,7 +84,9 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) ..\..\..\..\GameDownload\Outpost2\trunk\</Command>
+      <Command>copy $(TargetPath) ..\..\..\..\GameDownload\Outpost2\trunk\
+copy /Y "$(ProjectDir)RescueEscort.map" "..\..\..\..\GameDownload\Outpost2\trunk\RescueEscort.map"
+rem copy /Y "$(ProjectDir)MULTITEK.TXT" "..\..\..\..\GameDownload\Outpost2\trunk\MULTITEK.TXT"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying DLL to game folder</Message>
@@ -90,6 +94,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Briefing.cpp" />
+    <ClCompile Include="DisasterHelper.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="LevelMain.cpp" />
     <ClCompile Include="UnitHelper.cpp" />
@@ -111,9 +116,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Briefing.h" />
+    <ClInclude Include="DisasterHelper.h" />
+    <ClInclude Include="EnemyFightGroups.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ScriptGlobal.h" />
+    <ClInclude Include="StartingConvoys.h" />
     <ClInclude Include="UnitHelper.h" />
     <ClInclude Include="VehicleCounter.h" />
+    <ClInclude Include="VictoryDefeatConditions.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
