@@ -4,12 +4,14 @@ void DisasterHelper::SetMapProperties(int mapWidth, int mapHeight, bool wrapsEas
 {
 	if (mapWidth <= 0)
 	{
-		mapWidth = 32;
+		SendDebugMessage("Map width cannot be set to 0 or negative.");
+		return;
 	}
 
 	if (mapHeight <= 0)
 	{
-		mapHeight = 32;
+		SendDebugMessage("Map height cannot be set to 0 or negative.");
+		return;
 	}
 
 	this->mapWidth = mapWidth;
@@ -27,11 +29,13 @@ void DisasterHelper::SetDisasterPercents(int noDisasterPercent, int meteorPercen
 {
 	if (noDisasterPercent + meteorPercent + earthquakePercent + stormPercent + vortexPercent != 100)
 	{
+		SendDebugMessage("SetDisasterPercents: The sum of percents must = 100.");
 		return;
 	}
 
 	if (noDisasterPercent < 0 || meteorPercent < 0 || earthquakePercent < 0 || stormPercent < 0 || vortexPercent < 0)
 	{
+		SendDebugMessage("SetDisasterPercents: No value may be < 0.");
 		return;
 	}
 
@@ -46,11 +50,13 @@ void DisasterHelper::SetMeteorSizePercents(int smallMeteorPercent, int mediumMet
 {
 	if (smallMeteorPercent + mediumMeteorPercent + largeMeteorPercent != 100)
 	{
+		SendDebugMessage("SetMeteorSizePercents: The sum of percents must = 100.");
 		return;
 	}
 
 	if (smallMeteorPercent < 0 || mediumMeteorPercent < 0 || largeMeteorPercent < 0)
 	{
+		SendDebugMessage("SetMeteorSizePercents No value may be < 0.");
 		return;
 	}
 
@@ -59,68 +65,83 @@ void DisasterHelper::SetMeteorSizePercents(int smallMeteorPercent, int mediumMet
 	this->largeMeteorPercent = largeMeteorPercent;
 }
 
+void DisasterHelper::AddVortexCorridor(const MAP_RECT& mapRect, int corridorWeight)
+{
+	if (mapRect.Width() < 5 || mapRect.Height() < 5)
+	{
+		SendDebugMessage("Vortex corridor width & height must be > 5.");
+		return;
+	}
+
+	if (corridorWeight <= 0)
+	{
+		SendDebugMessage("Vortex corridor weight must be > 0.");
+		return;
+	}
+
+	for (int i = 0; i < corridorWeight; i++)
+	{
+		vortexRects.push_back(mapRect);
+	}
+}
+
 LOCATION DisasterHelper::GetRandMapLoc()
 {
 	if (!MapPropertiesSet())
 	{
-		return LOCATION(xOffset, yOffset);
+		SendDebugMessage("DisasterHelper map properties are not set.");
+		return LOCATION(0, 0);
 	}
 
 	return LOCATION(TethysGame::GetRand(mapWidth) + xOffset, TethysGame::GetRand(mapHeight) + yOffset);
 }
 
-LOCATION DisasterHelper::GetLocOutsideSafeAreas()
+bool DisasterHelper::IsLocInSafeArea(LOCATION& loc)
+{
+	for (auto& mapRect : SafeRects)
+	{
+		if (mapRect.Check(loc))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+LOCATION DisasterHelper::GetRandLocOutsideSafeAreas()
 {
 	if (!MapPropertiesSet())
 	{
-		return LOCATION(xOffset, yOffset);
+		SendDebugMessage("DisasterHelper map properties are not set.");
+		return LOCATION(0, 0);
 	}
 
 	LOCATION loc = GetRandMapLoc();
 
-	bool largeMeteorInSafeArea = true;
+	bool LocInSafeArea = true;
 	int numberOfLocsChecked = 0;
-	while (largeMeteorInSafeArea)
+	while (LocInSafeArea)
 	{
-		for (auto& mapRect : SafeRects)
+		if (LocInSafeArea)
 		{
-			if (mapRect.Check(loc))
+			loc = GetRandMapLoc();
+
+			numberOfLocsChecked++;
+
+			if (numberOfLocsChecked > 40)
 			{
-				loc = GetRandMapLoc();
-
-				numberOfLocsChecked++;
-
-				if (numberOfLocsChecked > 100)
-				{
-					SendDebugMessage("Unable to find a LOCATION outside of safe areas.");
-					return LOCATION(xOffset, yOffset);
-				}
-
-				continue;
+				SendDebugMessage("Unable to find a LOCATION outside of safe areas.");
+				return LOCATION(xOffset, yOffset);
 			}
+
+			continue;
 		}
 
 		break;
 	}
 
 	return loc;
-}
-
-MAP_RECT DisasterHelper::GetRandMapRect(int rectWidth, int rectHeight)
-{
-	LOCATION firstRectLoc = GetLocOutsideSafeAreas();
-
-	if (firstRectLoc.x + rectWidth > mapWidth)
-	{
-		firstRectLoc.x = mapWidth - rectWidth;
-	}
-
-	if (firstRectLoc.y + rectHeight < mapHeight)
-	{
-		firstRectLoc.y = mapHeight - rectHeight;
-	}
-
-	return MAP_RECT(firstRectLoc, LOCATION(firstRectLoc.x + rectWidth, firstRectLoc.y + rectHeight));
 }
 
 double DisasterHelper::DistanceBetweenPoints(LOCATION loc1, LOCATION loc2)
@@ -130,12 +151,7 @@ double DisasterHelper::DistanceBetweenPoints(LOCATION loc1, LOCATION loc2)
 
 void DisasterHelper::CreateRandomDisaster()
 {
-	int maxDisasterNumber = 100;
-	if (!allowVortexes)
-	{
-		maxDisasterNumber = 100 - vortexPercent;
-	}
-	int randNum = TethysGame::GetRand(maxDisasterNumber);
+	int randNum = TethysGame::GetRand(100);
 
 	if (randNum < noDisasterPercent)
 	{
@@ -160,99 +176,48 @@ void DisasterHelper::CreateRandomDisaster()
 	}
 }
 
-void DisasterHelper::CreateStorm()
-{
-	if (!MapPropertiesSet())
-	{
-		return;
-	}
-
-	LOCATION startLoc = GetRandMapLoc();
-	LOCATION endLoc = GetRandMapLoc();
-
-	int stormDuration = minStormDuration + TethysGame::GetRand(maxStormDuration - minStormDuration);
-
-	TethysGame::SetLightning(startLoc.x, startLoc.y, stormDuration, endLoc.x, endLoc.y);
-}
-
 void DisasterHelper::CreateEarthquake()
 {
 	if (!MapPropertiesSet())
 	{
+		SendDebugMessage("DisasterHelper map properties are not set.");
 		return;
 	}
 
-	LOCATION loc = GetRandMapLoc();
-	TethysGame::SetEarthquake(loc.x, loc.y, minQuakeStrength + TethysGame::GetRand(maxQuakeStrength - minQuakeStrength));
+	LOCATION loc = GetRandLocOutsideSafeAreas();
+	int quakeStrength = minQuakeStrength + TethysGame::GetRand(maxQuakeStrength - minQuakeStrength);
+	TethysGame::SetEarthquake(loc.x, loc.y, quakeStrength);
 }
 
-bool DisasterHelper::DoesPathEnterSafeArea(const LOCATION& pathStartLoc, const LOCATION& pathEndLoc)
+//minPercentHypotenuseTravel is the minimum percentage of the MAP_RECT's hypotenuse's size that the line must travel.
+LOCATION DisasterHelper::FindVortexEndLoc(const MAP_RECT& mapRect, const LOCATION& startLoc, double minPercentHypotenuseTravel)
 {
-	if (!MapPropertiesSet())
+	double minVortexTravelDistance = DistanceBetweenPoints(
+		LOCATION(mapRect.x1, mapRect.y1),
+		LOCATION(mapRect.x2, mapRect.y2)) * (minPercentHypotenuseTravel / 100);
+
+	LOCATION endLoc = mapRect.RandPt();
+
+	while (DistanceBetweenPoints(startLoc, endLoc) < minVortexTravelDistance)
 	{
-		return false;
+		endLoc = mapRect.RandPt();
 	}
 
-	std::vector<LOCATION> locsOnLine = GetLocationsOnLine(pathStartLoc, pathEndLoc);
-
-	//Check last point on line first.
-	for (auto& mapRect : SafeRects)
-	{
-		if (mapRect.Check(locsOnLine[locsOnLine.size() - 1]))
-		{
-			return true;
-		}
-	}
-
-	for (size_t i = 0; i < locsOnLine.size(); i = i + 3)
-	{
-		LOCATION loc = locsOnLine[i];
-
-		for (auto& mapRect : SafeRects)
-		{
-			if (mapRect.Check(locsOnLine[i]))
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
+	return endLoc;
 }
 
 void DisasterHelper::CreateVortex()
 {
-	if (!MapPropertiesSet())
+	if (vortexRects.size() == 0)
 	{
+		SendDebugMessage("No vortex corridors provided.");
 		return;
 	}
 
-	LOCATION vortexStartLoc, vortexEndLoc;
+	MAP_RECT vortexRect = vortexRects[TethysGame::GetRand(vortexRects.size())];
 
-	bool insideSafeArea = true;
-	int numberOfPathsChecked = 0;
-	while (insideSafeArea)
-	{
-		MAP_RECT vortexArea = GetRandMapRect(22, 22);
-
-		vortexStartLoc = vortexArea.RandPt();
-		vortexEndLoc = vortexArea.RandPt();
-
-		if (DoesPathEnterSafeArea(vortexStartLoc, vortexEndLoc))
-		{
-			numberOfPathsChecked++;
-
-			if (numberOfPathsChecked > 20)
-			{
-				SendDebugMessage("Unable to find safe vortex path.");
-				return;
-			}
-
-			continue;
-		}
-
-		break;
-	}
+	LOCATION vortexStartLoc = vortexRect.RandPt();
+	LOCATION vortexEndLoc = FindVortexEndLoc(vortexRect, vortexStartLoc, 33);
 
 	TethysGame::SetTornado(
 		vortexStartLoc.x,
@@ -263,23 +228,34 @@ void DisasterHelper::CreateVortex()
 		false);
 }
 
+void DisasterHelper::CreateStorm()
+{
+	if (!MapPropertiesSet())
+	{
+		SendDebugMessage("DisasterHelper map properties are not set.");
+		return;
+	}
+
+	//NOTE: Electrical storms will conintue beyond their end point if duration permits.
+	LOCATION startLoc = GetRandMapLoc();
+	LOCATION endLoc = GetRandMapLoc();
+
+	int stormDuration = minStormDuration + TethysGame::GetRand(maxStormDuration - minStormDuration);
+
+	TethysGame::SetLightning(startLoc.x, startLoc.y, stormDuration, endLoc.x, endLoc.y);
+}
+
 void DisasterHelper::CreateMeteor()
 {
 	if (!MapPropertiesSet())
 	{
+		SendDebugMessage("DisasterHelper map properties are not set.");
 		return;
 	}
 
 	LOCATION disasterLoc = GetRandMapLoc();
 
-	int maxMeteorNumber = 100;
-
-	if (!allowLargeMeteors)
-	{
-		maxMeteorNumber = 100 - largeMeteorPercent;
-	}
-
-	int randNumber = TethysGame::GetRand(maxMeteorNumber);
+	int randNumber = TethysGame::GetRand(100);
 	int meteorSize = 0;
 
 	if (randNumber <= smallMeteorPercent)
@@ -289,167 +265,21 @@ void DisasterHelper::CreateMeteor()
 	else if (randNumber <= smallMeteorPercent + mediumMeteorPercent)
 	{
 		meteorSize = 1;
+		disasterLoc = GetRandLocOutsideSafeAreas();
 	}
 	else if (randNumber <= smallMeteorPercent + mediumMeteorPercent + largeMeteorPercent)
 	{
 		meteorSize = 2;
-		disasterLoc = GetLocOutsideSafeAreas();
+		disasterLoc = GetRandLocOutsideSafeAreas();
 	}
 
 	TethysGame::SetMeteor(disasterLoc.x, disasterLoc.y, meteorSize);
-}
-
-double DisasterHelper::FindSlope(const LOCATION& firstLoc, const LOCATION& secondLoc, UniqueLineSlopeCondition& uniqueSlopeCondition)
-{
-	uniqueSlopeCondition = UniqueLineSlopeCondition::None;
-	if (firstLoc.x == secondLoc.x)
-	{
-		if (secondLoc.y > firstLoc.y)
-		{
-			uniqueSlopeCondition = UniqueLineSlopeCondition::PositiveInfinity;
-			return 0;
-		}
-		else if (firstLoc.y > secondLoc.y)
-		{
-			uniqueSlopeCondition = UniqueLineSlopeCondition::NegativeInfinity;
-			return 0;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	return (secondLoc.y - firstLoc.y) / (secondLoc.x - firstLoc.x);
-}
-
-std::vector<LOCATION> DisasterHelper::GetLocationsOnLine(LOCATION firstLoc, LOCATION secondLoc)
-{
-	if (!MapPropertiesSet())
-	{
-		std::vector<LOCATION> emptyVector;
-		return emptyVector;
-	}
-
-	//Ensure firstLoc has a lower or equal xCoord then secondLoc.
-	if (firstLoc.x > secondLoc.x)
-	{
-		LOCATION tempLoc = firstLoc;
-		firstLoc = secondLoc;
-		secondLoc = tempLoc;
-	}
-
-	UniqueLineSlopeCondition uniqueLineSlope;
-	double slope = FindSlope(firstLoc, secondLoc, uniqueLineSlope);
-
-	if (uniqueLineSlope != UniqueLineSlopeCondition::None || slope > 1 || slope < -1)
-	{
-		return GetLocationsOnHighSlopeLine(firstLoc, secondLoc, slope, uniqueLineSlope);
-	}
-	else
-	{
-		return GetLocationsOnLowSlopeLine(firstLoc, secondLoc, slope);
-	}
-}
-
-//Assumes firstLoc has a lower x coordinate then secondLoc
-std::vector<LOCATION> DisasterHelper::GetLocationsOnLowSlopeLine(const LOCATION& firstLoc, const LOCATION& secondLoc, double slope)
-{
-	std::vector<LOCATION> locs;
-
-	for (int x = firstLoc.x; x != secondLoc.x; x++)
-	{
-		double y = slope * (x - firstLoc.x) + firstLoc.y;
-
-		double integral;
-		double remainder = modf(y, &integral);
-
-		locs.push_back(LOCATION(x, (int)integral));
-
-		if (remainder != 0.0)
-		{
-			locs.push_back(LOCATION(x, (int)integral + 1));
-		}
-	}
-
-	locs.push_back(secondLoc);
-
-	return locs;
-}
-
-//Assumes firstLoc has a lower x coordinate then secondLoc
-std::vector<LOCATION> DisasterHelper::GetLocationsOnHighSlopeLine(const LOCATION& firstLoc, const LOCATION& secondLoc, double slope, UniqueLineSlopeCondition uniqueLineSlope)
-{
-	std::vector<LOCATION> locs;
-
-	if (uniqueLineSlope == UniqueLineSlopeCondition::PositiveInfinity)
-	{
-		for (int y = firstLoc.y; y <= secondLoc.y; y++)
-		{
-			locs.push_back(LOCATION(firstLoc.x, y));
-		}
-
-		return locs;
-	}
-	else if (uniqueLineSlope == UniqueLineSlopeCondition::NegativeInfinity)
-	{
-		for (int y = firstLoc.y; y >= secondLoc.y; y--)
-		{
-			locs.push_back(LOCATION(firstLoc.x, y));
-		}
-
-		return locs;
-	}
-
-	int y = firstLoc.y;
-	while (y != secondLoc.y)
-	{
-		double x = (y - firstLoc.y) / slope + firstLoc.x;
-
-		double integral;
-		double remainder = modf(x, &integral);
-
-		locs.push_back(LOCATION((int)integral, y));
-
-		if (remainder != 0.0)
-		{
-			locs.push_back(LOCATION((int)integral + 1, y));
-		}
-
-		if (slope > 0)
-		{
-			y++;
-		}
-		else
-		{
-			y--;
-		}
-	}
-
-	/*for (int y = firstLoc.y; y != secondLoc.y; y += 1 * slope)
-	{
-		double x = (y - firstLoc.y) / slope + firstLoc.x;
-
-		double integral;
-		double remainder = modf(x, &integral);
-
-		locs.push_back(LOCATION((int)integral, y));
-
-		if (remainder != 0.0)
-		{
-			locs.push_back(LOCATION((int)integral + 1, y));
-		}
-	}*/
-
-	locs.push_back(secondLoc);
-
-	return locs;
 }
 
 void DisasterHelper::SendDebugMessage(char* message)
 {
 #if _DEBUG
 	Unit unit;
-	TethysGame::AddMessage(unit, message, PlayerNum::Player0, SoundID::sndMessage2);
+	TethysGame::AddMessage(unit, message, PlayerNum::Player0, SoundID::sndBeep8);
 #endif
 }

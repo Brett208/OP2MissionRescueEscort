@@ -30,10 +30,6 @@ Export int InitProc()
 
 	ShowBriefing();
 
-	//NOTE: Sets mapWidth as 512 instead of 256. MapWidth appears to be set correctly.
-	//disasterHelper.SetMapProperties(GameMapEx::GetMapWidth(), GameMapEx::GetMapHeight(), false);
-	disasterHelper.SetMapProperties(256, 64, false);
-
 	TethysGame::SetDaylightEverywhere(false);
 	TethysGame::SetDaylightMoves(false);
 	GameMap::SetInitialLightLevel(-1);
@@ -99,27 +95,28 @@ Export int InitProc()
 
 	//TethysGame::SetLightning(1 + X_, 1 + Y_, 40, 15 + X_, 15 + Y_);
 
-	TethysGame::SetEarthquake(100 + X_, 7 + Y_, 1);
+	//TethysGame::SetEarthquake(100 + X_, 7 + Y_, 1);
 
-	TethysGame::SetTornado(1 + X_, 1 + Y_, 0, 15 + X_, 15 + Y_, true);
+	//TethysGame::SetTornado(1 + X_, 1 + Y_, 0, 15 + X_, 15 + Y_, true);
 
-	//Unit unit;
-	//TethysGame::CreateUnit(unit, map_id::mapCommandCenter, LOCATION(4 + X_, 5 + Y_), Player0, map_id::mapNone, 0);
+	Unit unit;
+	TethysGame::CreateUnit(unit, map_id::mapStructureFactory, LOCATION(15 + X_, 15 + Y_), Player0, map_id::mapNone, 0);
+	TethysGame::SetMeteor(15 + X_, 15 + Y_, 1);
 	//TethysGame::CreateUnit(unit, map_id::mapCommandCenter, LOCATION(8 + X_, 5 + Y_), Player0, map_id::mapNone, 0);
 	//TethysGame::CreateUnit(unit, map_id::mapCommandCenter, LOCATION(10 + X_, 8 + Y_), Player0, map_id::mapNone, 0);
 	//TethysGame::CreateUnit(unit, map_id::mapCommandCenter, LOCATION(17 + X_, 7 + Y_), Player0, map_id::mapNone, 0);
 
-	std::vector<LOCATION> locs = disasterHelper.GetLocationsOnLine(LOCATION(21 + X_, 1 + Y_), LOCATION(25 + X_, 20 + Y_));
+	//std::vector<LOCATION> locs = disasterHelper.GetLocationsOnLine(LOCATION(21 + X_, 1 + Y_), LOCATION(25 + X_, 20 + Y_));
 
-	Unit unit;
-	for (auto& loc : locs)
-	{
-		vehicleBuilderAI.CreateVechLightsOn(unit, map_id::mapRoboDozer, loc, map_id::mapNone);
-	}
+	//Unit unit;
+	//for (auto& loc : locs)
+	//{
+	//	vehicleBuilderAI.CreateVechLightsOn(unit, map_id::mapRoboDozer, loc, map_id::mapNone);
+	//}
 
-	disasterHelper.AddSafeRect(MAP_RECT(1 + X_, 1 + Y_, 256 + X_, 64 + Y_));
+	//disasterHelper.CreateVortex();
 
-	disasterHelper.CreateVortex();
+	scriptGlobal.DisasterTimeTrig = CreateTimeTrigger(true, false, 200, 600, "CreateDisaster"); //Set time in ticks (marks / 100) //1500, 3500
 
 	return true;	// Level loaded successfully
 }
@@ -132,4 +129,33 @@ Export void AIProc()
 	}
 }
 
-Export void NoResponseToTrigger() {}	// Optional function export, supposed to be empty
+Export void NoResponseToTrigger() {}
+
+void SetDisasterSafeZones()
+{
+	for (int i = 0; i < TethysGame::NoPlayers(); i++)
+	{
+		switch (i)
+		{
+		case 0: //Set Player 1's base safe area
+			disasterHelper.AddSafeRect(MAP_RECT(10 + X_, 10 + Y_, 30 + X_, 30 + Y_));
+			break;
+		case 1: //Set Player 2's base safe area and so on.
+			break;
+		}
+	}
+}
+
+Export void CreateDisaster()
+{
+	if (!disasterHelper.MapPropertiesSet())
+	{
+		disasterHelper.SetMapProperties(256, 64, false); //MapWidth, MapHeight, Does map wrap East/West
+		SetDisasterSafeZones();
+	}
+
+	disasterHelper.CreateRandomDisaster();
+}
+
+//NOTE: Sets mapWidth as 512 instead of 256. MapWidth appears to be set correctly.
+//disasterHelper.SetMapProperties(GameMapEx::GetMapWidth(), GameMapEx::GetMapHeight(), false);

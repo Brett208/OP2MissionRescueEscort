@@ -4,6 +4,7 @@
 
 struct ScriptGlobal
 {
+	Trigger DisasterTimeTrig;
 	Trigger TrigVictoryWaitTime;
 	Trigger TrigFailureWaitTime;
 
