@@ -44,6 +44,21 @@ namespace UnitHelper
 		return combatVehicleCount;
 	}
 
+	int VehicleCounter::GetNonCombatVehicleCount()
+	{
+		int nonCombatVehicleCount = 0;
+
+		for (size_t i = 0; i < VehicleCountVector.size(); ++i)
+		{
+			if (!IsWeapon(VehicleCountVector[i].UnitCargo))
+			{
+				nonCombatVehicleCount += VehicleCountVector[i].Count;
+			}
+		}
+
+		return nonCombatVehicleCount;
+	}
+
 	void VehicleCounter::PullVehiclesFromPlayer(PlayerUnitEnum playerUnitEnum)
 	{
 		Clear();

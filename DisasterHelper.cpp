@@ -98,6 +98,11 @@ LOCATION DisasterHelper::GetRandMapLoc()
 
 bool DisasterHelper::IsLocInSafeArea(LOCATION& loc)
 {
+	if (TethysGame::Time() * 100 >= safeZoneTimer) //TODO: Check on this
+	{
+		return true;
+	}
+
 	for (auto& mapRect : SafeRects)
 	{
 		if (mapRect.Check(loc))

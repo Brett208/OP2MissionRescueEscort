@@ -12,7 +12,7 @@ Export void CreateFightGroup1()
 	std::vector<Unit> units;
 	PlayerDifficulty difficulty = (PlayerDifficulty)Player[Player0].Difficulty();
 
-	vehicleBuilderAI.SetPlayer(Player1);
+	vehicleBuilderAI.SetPlayer(Player2);
 	vehicleBuilderAI.SetVehicleDirection(UnitDirection::South);
 
 	std::vector<map_id> turrets{ map_id::mapLaser, map_id::mapRailGun, map_id::mapEMP, map_id::mapThorsHammer };
@@ -60,7 +60,7 @@ Export void CreateFightGroup2()
 		turrets.push_back(map_id::mapEMP);
 	}
 
-	vehicleBuilderAI.SetPlayer(Player1);
+	vehicleBuilderAI.SetPlayer(Player2);
 	vehicleBuilderAI.CreateLineOfVehicles(units, LOCATION(1 + X_, 1 + Y_), UnitDirection::East, 1, map_id::mapPanther, turrets);
 
 	vehicleBuilderAI.PopulateFightGroup(scriptGlobal.FightGroup2, units);
@@ -82,7 +82,7 @@ Export void CreateFightGroup3()
 		turrets.push_back(map_id::mapEMP);
 	}
 
-	vehicleBuilderAI.SetPlayer(Player1);
+	vehicleBuilderAI.SetPlayer(Player2);
 	vehicleBuilderAI.CreateLineOfVehicles(units, LOCATION(1 + X_, 1 + Y_), UnitDirection::East, 1, map_id::mapPanther, turrets);
 
 	vehicleBuilderAI.PopulateFightGroup(scriptGlobal.FightGroup3, units);
@@ -94,7 +94,7 @@ void CreateAcidCloudFightGroup()
 {
 	std::vector<Unit> units;
 
-	vehicleBuilderAI.SetPlayer(Player1);
+	vehicleBuilderAI.SetPlayer(Player2);
 	vehicleBuilderAI.CreateLineOfVehicles(units, LOCATION(1 + X_, 22 + Y_), UnitDirection::East, 2, map_id::mapLynx, map_id::mapAcidCloud, 2);
 
 	vehicleBuilderAI.PopulateFightGroup(scriptGlobal.AcidCloudSneakFightGroup, units);
@@ -131,7 +131,7 @@ Export void CreateFinalFightGroup()
 		turrets.push_back(map_id::mapAcidCloud);
 	}
 
-	vehicleBuilderAI.SetPlayer(Player1);
+	vehicleBuilderAI.SetPlayer(Player2);
 	vehicleBuilderAI.SetVehicleDirection(UnitDirection::West);
 	vehicleBuilderAI.CreateLineOfVehicles(units, LOCATION(1 + X_, 1 + Y_), UnitDirection::South, 1, map_id::mapLynx, turrets);
 

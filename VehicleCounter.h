@@ -25,6 +25,7 @@ namespace UnitHelper
 		int GetVehicleCount(map_id vehicleType);
 		int GetVehicleCount(map_id vehicleType, map_id cargoType);
 		int GetCombatVehicleCount();
+		int GetNonCombatVehicleCount(); //NOTE: Any vehicle without a weapon is considered a non-combatant. This includes spiders & scouts.
 		void PullVehiclesFromRectangle(PlayerNum playerNum, InRectEnumerator inRectEnumerator);
 		void PullVehiclesFromPlayer(PlayerUnitEnum playerUnitEnum);
 		void Clear();

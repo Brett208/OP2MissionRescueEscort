@@ -2,6 +2,7 @@
 
 #include "OP2Helper\OP2Helper.h"
 #include "Outpost2DLL\Outpost2DLL.h"
+#include <climits>
 #include <cmath>
 #include <vector>
 
@@ -88,6 +89,14 @@ public:
 		this->maxStormDuration = maxDuration;
 	}
 
+	//Sets a timer value in marks where base safeZones expire, allowing more dangerous disasters to hit bases. 
+	//To make SafeZones never expire, set timeInMarks to the const TimerNeverExpires.
+	//To disable SafeZones without clearing them from DisasterHelper, set timeInMarks <= 0
+	void SetSafeZoneExpirationTimer(int timeInMarks)
+	{
+		this->safeZoneTimer = timeInMarks;
+	}
+
 	//Add a MAP_RECT where no earthquakes or large meteors will be created.
 	//This is designed to protect starting locations from powerful disasters.
 	void AddSafeRect(const MAP_RECT& safeRect)
@@ -122,6 +131,9 @@ public:
 		return mapWidth != 0;
 	}
 
+	static const int TimerNeverExpires = INT_MAX;
+	static const int TimerDefaultValue = 250; //In Marks
+
 private:
 	int xOffset = 31;
 	int yOffset = -1;
@@ -147,6 +159,8 @@ private:
 
 	int minStormDuration = 10;
 	int maxStormDuration = 55;
+
+	int safeZoneTimer = TimerDefaultValue;
 
 	std::vector<MAP_RECT> SafeRects;
 	std::vector<MAP_RECT> vortexRects;

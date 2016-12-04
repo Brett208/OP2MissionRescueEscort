@@ -2,6 +2,7 @@
 
 #include "ScriptGlobal.h"
 #include "VehicleCounter.h"
+#include "OP2Helper\OP2Helper.h"
 #include "Outpost2DLL\Outpost2DLL.h"
 
 UnitHelper::VehicleCounter vehicleCounter;
@@ -15,7 +16,7 @@ void CreateTimeVictoryCondition(Trigger& trigger, Trigger& victoryTrigger, int t
 bool IsScenarioLost()
 {
 	vehicleCounter.Clear();
-	vehicleCounter.PullVehiclesFromPlayer(PlayerUnitEnum(Player2));
+	vehicleCounter.PullVehiclesFromPlayer(PlayerUnitEnum(Player1));
 
 	if (vehicleCounter.GetCombatVehicleCount() < scriptGlobal.MinConvoySurvivingUnits)
 	{
@@ -33,13 +34,13 @@ bool IsScenarioLost()
 bool IsScenarioWon()
 {
 	vehicleCounter.Clear();
-	vehicleCounter.PullVehiclesFromPlayer(PlayerUnitEnum(Player2));
+	vehicleCounter.PullVehiclesFromPlayer(PlayerUnitEnum(Player1));
 	int convoyVehicleCount = vehicleCounter.GetCombatVehicleCount();
 
 
 	vehicleCounter.Clear();
 	MAP_RECT convoyFinishRect(LOCATION(X_, Y_), LOCATION(X_, Y_));
-	vehicleCounter.PullVehiclesFromRectangle(Player2, InRectEnumerator(convoyFinishRect));
+	vehicleCounter.PullVehiclesFromRectangle(Player1, InRectEnumerator(convoyFinishRect));
 
 	//Check if all remaining convoy vehicles have made it to the objective area.
 	return vehicleCounter.GetVehicleCount() == convoyVehicleCount;
@@ -75,4 +76,17 @@ void SetVictoryConvoyCounts(PlayerDifficulty playerDifficulty, int initialConvoy
 		scriptGlobal.MinEvacuationTransports = 4;
 		return;
 	}
+}
+
+void InitializeVictoryConditions(int evacConvoyNonCombatVehicleCount)
+{
+	Trigger victoryTrigger;
+
+	PlayerDifficulty playerDifficulty = (PlayerDifficulty)Player[Player0].Difficulty();
+	SetVictoryConvoyCounts(playerDifficulty, evacConvoyNonCombatVehicleCount);
+	char* victoryConditionText = FormatVictoryConditionMessage(playerDifficulty);
+	CreateTimeVictoryCondition(scriptGlobal.TrigVictoryWaitTime, victoryTrigger, 90, victoryConditionText);
+
+	scriptGlobal.TrigFailureWaitTime = CreateTimeTrigger(false, false, 90, "NoResponseToTrigger");
+	CreateFailureCondition(true, true, scriptGlobal.TrigFailureWaitTime, "Ignored");
 }

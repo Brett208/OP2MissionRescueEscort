@@ -31,11 +31,11 @@ void InitializeRescueConvoy(UnitHelper::VehicleBuilder& vehicleBuilderAI)
 	vehicleBuilderAI.CreateVechLightsOn(unit, map_id::mapScout, LOCATION(5 + X_, 5 + Y_), map_id::mapNone);
 }
 
-int InitializeEvacuationConvoy(UnitHelper::VehicleBuilder& vehicleBuilderAI)
+int InitializeEvacuationConvoy(bool multiplayer, UnitHelper::VehicleBuilder& vehicleBuilderAI)
 {
 	std::vector<Unit> units;
 
-	vehicleBuilderAI.SetPlayer(Player2);
+	vehicleBuilderAI.SetPlayer(Player1);
 	vehicleBuilderAI.SetVehicleDirection(UnitDirection::West);
 
 	vehicleBuilderAI.CreateLineOfVehicles(units, LOCATION(120 + X_, 5 + Y_), UnitDirection::South, 2, map_id::mapLynx, map_id::mapMicrowave, 3);
@@ -55,3 +55,14 @@ int InitializeEvacuationConvoy(UnitHelper::VehicleBuilder& vehicleBuilderAI)
 	return units.size();
 }
 
+void InitializeStartingEnemyUnits(UnitHelper::VehicleBuilder& vehicleBuilderAI)
+{
+	// Build Bad Guy Initial Units
+	vehicleBuilderAI.SetPlayer(Player2);
+	vehicleBuilderAI.SetVehicleDirection(UnitDirection::South);
+
+	std::vector<Unit> units;
+	vehicleBuilderAI.CreateLineOfVehicles(units, LOCATION(80 + X_, 5 + Y_), UnitDirection::South, 2, map_id::mapLynx, map_id::mapLaser, 3);
+
+	vehicleBuilderAI.MoveRelativeAmount(units, LOCATION(0, -10));
+}
