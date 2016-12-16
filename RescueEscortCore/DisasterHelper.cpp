@@ -98,12 +98,12 @@ LOCATION DisasterHelper::GetRandMapLoc()
 
 bool DisasterHelper::IsLocInSafeArea(LOCATION& loc)
 {
-	if (TethysGame::Time() * 100 >= safeZoneTimer) //TODO: Check on this
+	if (TethysGame::Time() / 100 >= safeZoneTimer)
 	{
-		return true;
+		return false;
 	}
 
-	for (auto& mapRect : SafeRects)
+	for (auto& mapRect : safeRects)
 	{
 		if (mapRect.Check(loc))
 		{
@@ -122,28 +122,25 @@ LOCATION DisasterHelper::GetRandLocOutsideSafeAreas()
 		return LOCATION(0, 0);
 	}
 
-	LOCATION loc = GetRandMapLoc();
-
+	LOCATION loc;
 	bool LocInSafeArea = true;
 	int numberOfLocsChecked = 0;
 	while (LocInSafeArea)
 	{
-		if (LocInSafeArea)
+		loc = GetRandMapLoc();
+
+		if (!IsLocInSafeArea(loc))
 		{
-			loc = GetRandMapLoc();
-
-			numberOfLocsChecked++;
-
-			if (numberOfLocsChecked > 40)
-			{
-				SendDebugMessage("Unable to find a LOCATION outside of safe areas.");
-				return LOCATION(xOffset, yOffset);
-			}
-
-			continue;
+			break;
 		}
 
-		break;
+		numberOfLocsChecked++;
+
+		if (numberOfLocsChecked > 40)
+		{
+			SendDebugMessage("Unable to find a LOCATION outside of safe areas.");
+			return LOCATION(0, 0);
+		}
 	}
 
 	return loc;

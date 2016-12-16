@@ -1,5 +1,7 @@
 #pragma once
 
+// Disaster Helper Version: 1.0
+
 #include "OP2Helper\OP2Helper.h"
 #include "Outpost2DLL\Outpost2DLL.h"
 #include <climits>
@@ -97,11 +99,42 @@ public:
 		this->safeZoneTimer = timeInMarks;
 	}
 
+	void ClearSafeRects()
+	{
+		safeRects.clear();
+	}
+
 	//Add a MAP_RECT where no earthquakes or large meteors will be created.
 	//This is designed to protect starting locations from powerful disasters.
 	void AddSafeRect(const MAP_RECT& safeRect)
 	{
-		SafeRects.push_back(safeRect);
+		safeRects.push_back(safeRect);
+	}
+
+	//Add a c style array of MAP_RECTs where no earthquakes or large meteors will be created.
+	//This is designed to protect starting locations from powerful disasters.
+	void AddSafeRects(int arraySize, MAP_RECT safeRects[])
+	{
+		for (int i = 0; i < arraySize; i++)
+		{
+			this->safeRects.push_back(safeRects[i]);
+		}
+	}
+
+	template<typename MAP_RECT, size_t N>
+	void AddSafeRects(const std::array<MAP_RECT, N>& safeRects)
+	{
+		this->safeRects.insert(this->safeRects.end(), safeRects.begin(), safeRects.end());
+	}
+
+	void AddSafeRects(const std::vector<MAP_RECT>& safeRects)
+	{
+		this->safeRects.insert(this->safeRects.end(), safeRects.begin(), safeRects.end());
+	}
+
+	void ClearVortexCorridors()
+	{
+		vortexRects.clear();
 	}
 
 	//corridorWeight represents how often the corridor is chosen randomly.
@@ -111,16 +144,6 @@ public:
 	//Small vortex corridors will force the vortex to not travel very far, but stay mostly stationary.
 	//Min vortex corridor width is 5 and height is 5.
 	void AddVortexCorridor(const MAP_RECT& mapRect, int corridorWeight);
-
-	void ClearSafeRects()
-	{
-		SafeRects.clear();
-	}
-
-	void ClearVortexCorridors()
-	{
-		vortexRects.clear();
-	}
 
 	// Attempts to return a LOCATION that exists outside any declared safe areas. 
 	// If unable to find a valid LOCATION, reports a warning in debug mode and returns (0,0).
@@ -162,7 +185,7 @@ private:
 
 	int safeZoneTimer = TimerDefaultValue;
 
-	std::vector<MAP_RECT> SafeRects;
+	std::vector<MAP_RECT> safeRects;
 	std::vector<MAP_RECT> vortexRects;
 
 	LOCATION GetRandMapLoc();

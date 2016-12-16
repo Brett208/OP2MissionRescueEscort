@@ -11,10 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{CB7579F0-281E-4E06-BBC9-76F35D61A1D7}</ProjectGuid>
-    <RootNamespace>RescueEscort</RootNamespace>
+    <ProjectGuid>{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}</ProjectGuid>
+    <RootNamespace>RescueEscortMultiplayer</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>RescueEscort</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,29 +40,27 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>cResEsc</TargetName>
+    <TargetName>mu2Resc</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>cResEsc</TargetName>
+    <TargetName>mu2Resc</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../API/;../../API/Outpost2Dialog/;RescueEscortCore/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../API/;..\RescueEscortCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <BaseAddress>0x11000000</BaseAddress>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) ..\..\..\..\GameDownload\Outpost2\trunk\
-rem The following files are copied in the project RescueEscortCore.
-rem copy /Y "$(ProjectDir)RescueEscort.map" "..\..\..\..\GameDownload\Outpost2\trunk\RescueEscort.map"
-rem copy /Y "$(ProjectDir)PursuedTechTree.txt" "..\..\..\..\GameDownload\Outpost2\trunk\PursuedTechTree.txt"</Command>
+      <Command>copy $(TargetPath) "..\..\..\..\..\GameDownload\Outpost2\trunk\"
+rem copy $(TargetPath) ..\..\..\..\GameDownload\Outpost2\trunk\</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying DLL to game folder</Message>
@@ -75,56 +72,45 @@ rem copy /Y "$(ProjectDir)PursuedTechTree.txt" "..\..\..\..\GameDownload\Outpost
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../../API/;../../API/Outpost2Dialog/;RescueEscortCore/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../API/;..\RescueEscortCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <BaseAddress>0x11000000</BaseAddress>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) ..\..\..\..\GameDownload\Outpost2\trunk\
-rem The following files are copied in the project RescueEscortCore.
-rem copy /Y "$(ProjectDir)RescueEscort.map" "..\..\..\..\GameDownload\Outpost2\trunk\RescueEscort.map"
-rem copy /Y "$(ProjectDir)PursuedTechTree.txt" "..\..\..\..\GameDownload\Outpost2\trunk\PursuedTechTree.txt"</Command>
+      <Command>copy $(TargetPath) "..\..\..\..\..\GameDownload\Outpost2\trunk\"
+rem copy $(TargetPath) ..\..\..\..\GameDownload\Outpost2\trunk\</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying DLL to game folder</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Briefing.cpp" />
     <ClCompile Include="DllMain.cpp" />
-    <ClCompile Include="LevelMain.cpp" />
+    <ClCompile Include="LevelMainMultiplayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\API\HFL\Source\HFL.vcxproj">
+    <ProjectReference Include="..\..\..\API\HFL\Source\HFL.vcxproj">
       <Project>{0fc43a25-fb89-4258-849b-cb3c0a061e0d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\API\OP2Helper\OP2Helper.vcxproj">
+    <ProjectReference Include="..\..\..\API\OP2Helper\OP2Helper.vcxproj">
       <Project>{0b520c87-4cfd-4a4d-abd4-f87d26df9aad}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\API\Outpost2Dialog\Outpost2Dialog.vcxproj">
+    <ProjectReference Include="..\..\..\API\Outpost2Dialog\Outpost2Dialog.vcxproj">
       <Project>{aa68af24-3b46-4567-b3cf-826c5a48ae76}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\API\Outpost2DLL\Outpost2DLL.vcxproj">
+    <ProjectReference Include="..\..\..\API\Outpost2DLL\Outpost2DLL.vcxproj">
       <Project>{b3f40368-f3cc-4ec5-a758-f5dad08feddc}</Project>
     </ProjectReference>
-    <ProjectReference Include="RescueEscortCore\RescueEscortCore.vcxproj">
+    <ProjectReference Include="..\RescueEscortCore\RescueEscortCore.vcxproj">
       <Project>{dbd75b87-48f3-41d1-8694-1824f49b498b}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Briefing.h" />
-    <ClInclude Include="Line.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

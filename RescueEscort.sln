@@ -8,6 +8,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Outpost2DLL", "..\..\API\Outpost2DLL\Outpost2DLL.vcxproj", "{B3F40368-F3CC-4EC5-A758-F5DAD08FEDDC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RescueEscort", "RescueEscort.vcxproj", "{CB7579F0-281E-4E06-BBC9-76F35D61A1D7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DBD75B87-48F3-41D1-8694-1824F49B498B} = {DBD75B87-48F3-41D1-8694-1824F49B498B}
+	EndProjectSection
 EndProject
 Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "Outpost2", "..\..\..\..\GameDownload\Outpost2\trunk\Outpost2.exe", "{992CAEDB-DFF2-46C5-878D-55DEF2F62ED9}"
 	ProjectSection(DebuggerProjectSystem) = preProject
@@ -25,6 +28,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFL", "..\..\API\HFL\Source\HFL.vcxproj", "{0FC43A25-FB89-4258-849B-CB3C0A061E0D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Outpost2Dialog", "..\..\API\Outpost2Dialog\Outpost2Dialog.vcxproj", "{AA68AF24-3B46-4567-B3CF-826C5A48AE76}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RescueEscortCore", "RescueEscortCore\RescueEscortCore.vcxproj", "{DBD75B87-48F3-41D1-8694-1824F49B498B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RescueEscortMultiplayer", "RescueEscortMultiplayer\RescueEscortMultiplayer.vcxproj", "{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +99,28 @@ Global
 		{AA68AF24-3B46-4567-B3CF-826C5A48AE76}.ReleaseMinSize|Win32.Build.0 = Release|Win32
 		{AA68AF24-3B46-4567-B3CF-826C5A48AE76}.ReleaseMinSize|x64.ActiveCfg = Release|x64
 		{AA68AF24-3B46-4567-B3CF-826C5A48AE76}.ReleaseMinSize|x64.Build.0 = Release|x64
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.Debug|Win32.Build.0 = Debug|Win32
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.Debug|x64.ActiveCfg = Debug|x64
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.Debug|x64.Build.0 = Debug|x64
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.Release|Win32.ActiveCfg = Release|Win32
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.Release|Win32.Build.0 = Release|Win32
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.Release|x64.ActiveCfg = Release|x64
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.Release|x64.Build.0 = Release|x64
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.ReleaseMinSize|Win32.ActiveCfg = Release|Win32
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.ReleaseMinSize|Win32.Build.0 = Release|Win32
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.ReleaseMinSize|x64.ActiveCfg = Release|x64
+		{DBD75B87-48F3-41D1-8694-1824F49B498B}.ReleaseMinSize|x64.Build.0 = Release|x64
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.Debug|Win32.Build.0 = Debug|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.Debug|x64.ActiveCfg = Debug|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.Release|Win32.ActiveCfg = Release|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.Release|Win32.Build.0 = Release|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.Release|x64.ActiveCfg = Release|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.ReleaseMinSize|Win32.ActiveCfg = Release|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.ReleaseMinSize|Win32.Build.0 = Release|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.ReleaseMinSize|x64.ActiveCfg = Release|Win32
+		{A3791821-7C9C-4CF9-9B3F-CD9659C8D4C5}.ReleaseMinSize|x64.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

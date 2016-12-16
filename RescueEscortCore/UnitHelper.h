@@ -36,7 +36,8 @@ namespace UnitHelper
 			double percentMinDamage, double percentMaxDamage);
 		void VehicleBuilder::CauseRandomDamage(std::vector<Unit> &units, int percentChanceDamaged, int minDamage, int maxDamage);
 
-		void VehicleBuilder::MoveRelativeAmount(std::vector<Unit> &units, LOCATION relativeMoveAmount);
+		void VehicleBuilder::Move(std::vector<Unit> &units, LOCATION location);
+		void VehicleBuilder::MoveRelativeAmount(std::vector<Unit>& units, LOCATION relativeMoveAmount);
 
 		void VehicleBuilder::CreateVehiclesInRect(std::vector<Unit> &units, MAP_RECT mapRect, map_id vehicleType,
 			const std::vector<map_id> &cargoTypes);

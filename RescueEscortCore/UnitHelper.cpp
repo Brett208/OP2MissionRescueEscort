@@ -305,11 +305,19 @@ namespace UnitHelper
 		}
 	}
 
-	void VehicleBuilder::MoveRelativeAmount(std::vector<Unit> &units, LOCATION relativeMoveAmount)
+	void VehicleBuilder::MoveRelativeAmount(std::vector<Unit>& units, LOCATION relativeMoveAmount)
 	{
-		for (Unit unit : units)
+		for (Unit& unit : units)
 		{
 			unit.DoMove(unit.Location() + relativeMoveAmount);
+		}
+	}
+
+	void VehicleBuilder::Move(std::vector<Unit> &units, LOCATION location)
+	{
+		for (Unit& unit : units)
+		{
+			unit.DoMove(location);
 		}
 	}
 

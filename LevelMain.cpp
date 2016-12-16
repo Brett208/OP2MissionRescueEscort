@@ -1,7 +1,6 @@
 #include "InitializeScenario.h"
 #include <OP2Helper/OP2Helper.h>
 #include <Outpost2DLL/Outpost2DLL.h>
-#include <vector>
 
 // Required data exports  (Description, Map, TechTree, GameType, NumPlayers)
 ExportLevelDetailsEx("Campaign - Ply, Pursued, Ep 3, 'Rescue Escort'", "RescueEscort.map", "PursuedTechTree.txt", MissionTypes::Colony, 3, 12, true);
@@ -19,7 +18,7 @@ Export int InitProc()
 
 	InitializeScenario(Multiplayer);
 
-	return true;	// Level loaded successfully
+	return true; // Level loaded successfully
 }
 
 
