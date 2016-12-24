@@ -486,4 +486,33 @@ namespace UnitHelper
 	{
 		return (UnitDirection)TethysGame::GetRand(8);
 	}
+
+	map_id GetRandomTankType(bool includeTigers)
+	{
+		int numberOfTanks = 2;
+		if (includeTigers)
+			numberOfTanks++;
+
+		int tankIndex = TethysGame::GetRand(numberOfTanks);
+
+		switch (tankIndex)
+		{
+		case 0:
+			return map_id::mapLynx;
+		case 1:
+			return map_id::mapPanther;
+		default:
+			return map_id::mapTiger;
+		}
+	}
+
+	map_id ChooseRepairVehicleType(bool isEden)
+	{
+		if (isEden)
+		{
+			return map_id::mapRepairVehicle;
+		}
+
+		return map_id::mapSpider;
+	}
 }

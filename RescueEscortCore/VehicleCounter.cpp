@@ -22,59 +22,51 @@ namespace UnitHelper
 		int index = GetVehicleIndex(vehicleType, cargoType);
 
 		if (index == -1)
-		{
 			return 0;
-		}
 
 		return VehicleCountVector[index].Count;
 	}
 
-	int VehicleCounter::GetCombatVehicleCount()
+	int VehicleCounter::GetTruckCargoCount(Truck_Cargo truckCargo)
 	{
-		int combatVehicleCount = 0;
+		int index = GetTruckCargoIndex(truckCargo);
 
-		for (size_t i = 0; i < VehicleCountVector.size(); ++i)
-		{
-			if (IsWeapon(VehicleCountVector[i].UnitCargo))
-			{
-				combatVehicleCount += VehicleCountVector[i].Count;
-			}
-		}
+		if (index == -1)
+			return 0;
 
-		return combatVehicleCount;
+		return truckCargoCountVector[index].Count;
 	}
 
-	int VehicleCounter::GetNonCombatVehicleCount()
+	void VehicleCounter::PullVehiclesFromPlayer(PlayerNum playerNum)
 	{
-		int nonCombatVehicleCount = 0;
+		PlayerVehicleEnum playerVehicleEnum(playerNum);
 
-		for (size_t i = 0; i < VehicleCountVector.size(); ++i)
-		{
-			if (!IsWeapon(VehicleCountVector[i].UnitCargo))
-			{
-				nonCombatVehicleCount += VehicleCountVector[i].Count;
-			}
-		}
-
-		return nonCombatVehicleCount;
-	}
-
-	void VehicleCounter::PullVehiclesFromPlayer(PlayerUnitEnum playerUnitEnum)
-	{
 		Clear();
 
-		Unit unit;
-		while (playerUnitEnum.GetNext(unit))
+		UnitEx unit;
+		while (playerVehicleEnum.GetNext(unit))
 		{
-			AddVehicleToVector(unit.GetType(), unit.GetCargo());
+			map_id unitType = unit.GetType();
+			map_id unitCargo = map_id::mapNone;
+
+			Truck_Cargo truckCargo = Truck_Cargo::truckEmpty;
+
+			if (unitType == map_id::mapCargoTruck)
+				truckCargo = unit.GetCargoType();
+			else
+				unitCargo = unit.GetCargo();
+
+			SortVehicle(unitType, unitCargo, truckCargo);
 		}
 	}
 
-	void VehicleCounter::PullVehiclesFromRectangle(PlayerNum playerNum, InRectEnumerator inRectEnumerator)
+	void VehicleCounter::PullVehiclesFromRectangle(PlayerNum playerNum, const MAP_RECT& mapRect)
 	{
+		InRectEnumerator inRectEnumerator(mapRect);
+
 		Clear();
 
-		Unit unit;
+		UnitEx unit;
 		while (inRectEnumerator.GetNext(unit))
 		{
 			if ((playerNum != PlayerNum::PlayerAll) && (unit.OwnerID() != (int)playerNum))
@@ -82,14 +74,19 @@ namespace UnitHelper
 				continue;
 			}
 
-			AddVehicleToVector(unit.GetType(), unit.GetCargo());
+			SortVehicle(unit.GetType(), unit.GetCargo(), unit.GetCargoType());
 		}
 	}
 
 	void VehicleCounter::Clear()
 	{
-		VehicleCount = 0;
+		vehicleCount = 0;
+		nonCombatVehicleCount = 0;
+		combatVehicleCount = 0;
 		VehicleCountVector.clear();
+
+		allConVecsHaveKits = true;
+		allTrucksHaveCargo = true;
 	}
 
 	// PRIVATE FUNCTIONS
@@ -120,13 +117,52 @@ namespace UnitHelper
 		return -1;
 	}
 
+	/*If Unit and cargo combination do not exist in vector, -1 is returned.*/
+	int VehicleCounter::GetTruckCargoIndex(Truck_Cargo truckCargo)
+	{
+		for (size_t i = 0; i < truckCargoCountVector.size(); ++i)
+		{
+			if (truckCargoCountVector[i].TruckCargo == truckCargo)
+				return i;
+		}
+
+		return -1;
+	}
+
+	void VehicleCounter::SortVehicle(map_id vehicleType, map_id cargoType, Truck_Cargo truckCargo)
+	{
+		AddVehicleToVector(vehicleType, cargoType);
+
+		if (vehicleType == map_id::mapCargoTruck)
+		{
+			AddTruckCargoToVector(truckCargo);
+		}
+
+		//Not required because both enums only return vehicles.
+		/*if (!IsVehicle(vehicleType))
+		return;*/
+
+		vehicleCount++;
+
+		if (vehicleType == map_id::mapConVec && cargoType == map_id::mapNone)
+			allConVecsHaveKits = false;
+
+		else if (vehicleType == map_id::mapCargoTruck && truckCargo == Truck_Cargo::truckEmpty)
+			allTrucksHaveCargo = false;
+
+		if (IsWeapon(cargoType))
+			combatVehicleCount++;
+		else
+			nonCombatVehicleCount++;
+	}
+
 	void VehicleCounter::AddVehicleToVector(map_id vehicleType, map_id cargoType)
 	{
-		int index = GetVehicleIndex(vehicleType, cargoType);
+		int vehicleIndex = GetVehicleIndex(vehicleType, cargoType);
 
-		if (index == -1)
+		if (vehicleIndex == -1)
 		{
-			UnitCount unitCount;
+			VehicleCount unitCount;
 			unitCount.UnitType = vehicleType;
 			unitCount.UnitCargo = cargoType;
 			unitCount.Count = 1;
@@ -135,13 +171,23 @@ namespace UnitHelper
 		}
 		else
 		{
-			VehicleCountVector[index].Count++;
+			VehicleCountVector[vehicleIndex].Count++;
 		}
+	}
 
-		if (IsVehicle(vehicleType))
+	void VehicleCounter::AddTruckCargoToVector(Truck_Cargo truckCargo)
+	{
+		int truckCargoIndex = GetTruckCargoIndex(truckCargo);
+
+		if (truckCargoIndex == -1)
 		{
-			VehicleCount++;
+			TruckCount truckCount;
+			truckCount.TruckCargo = truckCargo;
+			truckCount.Count = 1;
 		}
-
+		else
+		{
+			truckCargoCountVector[truckCargoIndex].Count++;
+		}
 	}
 }

@@ -156,6 +156,7 @@ copy /Y "PursuedTechTree.txt" "..\..\..\..\..\GameDownload\Outpost2\trunk\Pursue
     <ClInclude Include="InitializeScenario.h" />
     <ClInclude Include="ScriptGlobal.h" />
     <ClInclude Include="StartingConvoys.h" />
+    <ClInclude Include="Technology.h" />
     <ClInclude Include="UnitHelper.h" />
     <ClInclude Include="VehicleCounter.h" />
     <ClInclude Include="VictoryDefeatConditions.h" />

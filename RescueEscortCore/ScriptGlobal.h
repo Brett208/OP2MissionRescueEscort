@@ -17,7 +17,9 @@ struct ScriptGlobal
 	Trigger TrigFightGroupSE;
 	Trigger TrigFightGroupN;
 	Trigger TrigFightGroupS;
+	Trigger TrigFightGroupS2;
 	Trigger TrigFightGroupNW;
+	Trigger TrigFightGroupNW2;
 	Trigger TrigFightGroupSW;
 	Trigger TrigChaseFightGroup;
 
@@ -25,17 +27,23 @@ struct ScriptGlobal
 	FightGroup FightGroupSE;
 	FightGroup FightGroupN;
 	FightGroup FightGroupS;
+	FightGroup FightGroupS2;
 	FightGroup FightGroupNW;
+	FightGroup FightGroupNW2;
 	FightGroup FightGroupSW;
-	FightGroup FirstPatrolFightGroup;
 	FightGroup FinalTigerFightGroup;
 	FightGroup FinalLynxFightGroup;
-	FightGroup StaticPantherFightGroup;
+	
+	FightGroup FirstPatrolFightGroup;
+	FightGroup EastPatrolFightGroup;
+	FightGroup CenterPatrolFightGroup;
+	FightGroup WestPatrolFightGroup;
+	
 
 	int CurrentWaypointIndex;
 	int LastTickMoveWaypointSet;
 
-	FightGroup LynxPatrolFightGroup;
+	
 
 };
 

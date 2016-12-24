@@ -4,13 +4,12 @@
 #include "StartingConvoys.h"
 #include "VictoryDefeatConditions.h"
 #include "DisasterHelper.h"
+#include "Technology.h"
 #include "ScriptGlobal.h"
 #include "Outpost2DLL\Outpost2DLL.h"
 #include <vector>
 #include <array>
 
-void SetMultipleResearchedTechs(int playerNumb, std::vector<int> completedResearch);
-void SetResearchedTech();
 Export void CreateDisaster();
 
 ScriptGlobal scriptGlobal;
@@ -24,18 +23,92 @@ SongIds PlayList[] = {
 };
 
 std::vector<LOCATION> waypointLocs = { 
-	LOCATION(201 + X_, 29 + Y_), LOCATION(184 + X_, 15 + Y_), LOCATION(145 + X_, 59 + Y_), 
-	LOCATION(110 + X_, 57 + Y_), LOCATION(96 + X_, 7 + Y_), LOCATION(65 + X_, 11 + Y_), 
-	LOCATION(41 + X_, 50 + Y_), LOCATION(19 + X_, 40 + Y_), LOCATION(10 + X_, 5 + Y_) };
+	LOCATION(201 + X_, 29 + Y_), LOCATION(172 + X_, 21 + Y_), LOCATION(145 + X_, 57 + Y_), 
+	LOCATION(117 + X_, 55 + Y_), LOCATION(95 + X_, 10 + Y_), LOCATION(61 + X_, 14 + Y_), 
+	LOCATION(37 + X_, 48 + Y_), LOCATION(24 + X_, 44 + Y_), LOCATION(10 + X_, 5 + Y_) };
 int waypointMoveCheckTickInterval = 30;
+
+//Note: Scenario must have 5 or fewer human players to work.
+PlayerColor GetAIColor(bool allowBlack = false)
+{
+	int totalColors = 6;
+	if (allowBlack)
+		totalColors++;
+
+	std::vector<int> availableColors;
+	for (int i = 0; i < totalColors; ++i)
+	{
+		availableColors.push_back(ExtPlayer[i].GetColorNumber());
+	}
+
+	for (int i = 0; i < TethysGame::NoPlayers() - 1; ++i)
+	{
+		availableColors.erase(
+			std::remove(availableColors.begin(), availableColors.end(), ExtPlayer[i].GetColorNumber()), availableColors.end());
+	}
+	
+	if (availableColors.size() == 0)
+		return PlayerColor::PlayerBlue;
+
+	int colorIndex = TethysGame::GetRand(availableColors.size());
+
+	return (PlayerColor)availableColors[colorIndex];
+}
+
+void InitializeSurpriseAttackTriggers()
+{
+	//W: 13500
+	int numberOfPossibleSurpriseAttacks = 6;
+
+	int indexToSkip = TethysGame::GetRand(numberOfPossibleSurpriseAttacks);
+
+	for (int i = 0; i < numberOfPossibleSurpriseAttacks; ++i)
+	{
+		switch (i)
+		{
+		case 0:
+			scriptGlobal.TrigFightGroupSE = CreateTimeTrigger(true, true, 1200 + TethysGame::GetRand(200), "CreateFightGroupSE");
+			break;
+		case 1:
+			scriptGlobal.TrigFightGroupNE = CreateTimeTrigger(true, true, 1400 + TethysGame::GetRand(200), "CreateFightGroupNE");
+			break;
+		case 2:
+			if (TethysGame::GetRand(2) == 0)
+				scriptGlobal.TrigFightGroupS = CreateTimeTrigger(true, true, 3500 + TethysGame::GetRand(200), "CreateFightGroupS");
+			else
+				scriptGlobal.TrigFightGroupS2 = CreateTimeTrigger(true, true, 5000 + TethysGame::GetRand(200), "CreateFightGroupS2");
+			break;
+		case 3:
+			scriptGlobal.TrigFightGroupN = CreateTimeTrigger(true, true, 8000 + TethysGame::GetRand(200), "CreateFightGroupN");
+			break;
+		case 4:
+			if (TethysGame::GetRand(2) == 0)
+				scriptGlobal.TrigFightGroupNW = CreateTimeTrigger(true, true, 9000 + TethysGame::GetRand(200), "CreateFightGroupNW");
+			else
+				scriptGlobal.TrigFightGroupNW2 = CreateTimeTrigger(true, true, 10000 + TethysGame::GetRand(200), "CreateFightGroupNW2");
+			break;
+		case 5:
+			scriptGlobal.TrigFightGroupSW = CreateTimeTrigger(true, true, 12000 + TethysGame::GetRand(200), "CreateFightGroupSW");
+			break;
+		}
+	}
+}
 
 void InitializeScenario(bool multiplayer)
 {
+	//MAP_RECT mapRect(25, 25, 10, 10);
+	//MAP_RECT mapRect(10, 10, 25, 25);
+
+	//bool inside = mapRect.Check(LOCATION(15, 15));
+
 	scriptGlobal.Multiplayer = multiplayer;
 
-	TethysGame::SetDaylightEverywhere(false);
 	TethysGame::SetDaylightMoves(false);
-	GameMap::SetInitialLightLevel(-1);
+	if (multiplayer && TethysGame::UsesDayNight())
+	{
+		TethysGame::SetDaylightEverywhere(false);
+		GameMap::SetInitialLightLevel(1);
+	}
 
 	Player[0].CenterViewOn(167 + X_, 3 + Y_);
 
@@ -44,6 +117,7 @@ void InitializeScenario(bool multiplayer)
 		Player[1].CenterViewOn(256 + X_, 25 + Y_);
 	}
 
+	Player[Player0].GoHuman();
 	Player[Player0].GoPlymouth();
 
 	if (!multiplayer)
@@ -51,18 +125,8 @@ void InitializeScenario(bool multiplayer)
 		Player[Player0].SetColorNumber(PlayerColor::PlayerRed);
 	}
 
-	Player[Player0].GoHuman();
-	Player[Player0].SetKids(0);
-	Player[Player0].SetWorkers(0);
-	Player[Player0].SetScientists(0);
-	Player[Player0].SetFoodStored(0);
-	TethysGame::ForceMoraleGood(Player0);
-	TethysGame::ForceMoraleGood(Player0);
-
 	Player[Player1].GoPlymouth();
 
-	TethysGame::ForceMoraleGood(Player1);
-	TethysGame::ForceMoraleGood(Player1);
 	if (multiplayer)
 	{
 		Player[Player1].GoHuman();
@@ -74,15 +138,16 @@ void InitializeScenario(bool multiplayer)
 	}
 
 	Player[Player2].GoEden();
-	if (!multiplayer)
+	Player[Player2].GoAI();
+	if (multiplayer)
+	{
+		Player[Player2].SetColorNumber(GetAIColor());
+	}
+	else
 	{
 		Player[Player2].SetColorNumber(PlayerColor::PlayerBlue);
 	}
-	
-	Player[Player2].GoAI();
-	TethysGame::ForceMoraleGood(Player2);
-	TethysGame::ForceMoraleGood(Player2);
-	
+
 	Player[Player0].AllyWith(Player1);
 	Player[Player1].AllyWith(Player0);
 
@@ -93,28 +158,19 @@ void InitializeScenario(bool multiplayer)
 
 	SetResearchedTech();
 
-	InitializeRescueConvoy(vehicleBuilderAI);
+	InitializeRescueConvoy(Player[0].IsEden() != 0, multiplayer, vehicleBuilderAI);
 
-	InitializeEvacuationConvoy(multiplayer, vehicleBuilderAI);
+	InitializeEvacuationConvoy(multiplayer, Player[1].IsEden() != 0, vehicleBuilderAI);
 
 	vehicleCounter.Clear();
 	vehicleCounter.PullVehiclesFromPlayer(Player1);
-	int evacConvoyNonCombatVehicleCount = vehicleCounter.GetNonCombatVehicleCount();
+	int evacConvoyNonCombatVehicleCount = vehicleCounter.NonCombatVehicleCount();
 
 	InitializeVictoryConditions(evacConvoyNonCombatVehicleCount);
 
 	scriptGlobal.TrigChaseFightGroup = CreateTimeTrigger(true, true, 1800 + TethysGame::GetRand(200), "CreateFinalFightGroup");
-	scriptGlobal.TrigFightGroupSE = CreateTimeTrigger(true, true, 1200 + TethysGame::GetRand(200), "CreateFightGroupSE");
-	scriptGlobal.TrigFightGroupNE = CreateTimeTrigger(true, true, 1600 + TethysGame::GetRand(200), "CreateFightGroupNE");
 	
-	
-	scriptGlobal.TrigFightGroupS = CreateTimeTrigger(true, true, 3500 + TethysGame::GetRand(200), "CreateFightGroupS");
-	//South2: 5000
-	scriptGlobal.TrigFightGroupN = CreateTimeTrigger(true, true, 8000 + TethysGame::GetRand(200), "CreateFightGroupN");
-	scriptGlobal.TrigFightGroupNW = CreateTimeTrigger(true, true, 9000 + TethysGame::GetRand(200), "CreateFightGroupNW");
-	//NW2: 10000
-	scriptGlobal.TrigFightGroupSW = CreateTimeTrigger(true, true, 12000 + TethysGame::GetRand(200), "CreateFightGroupSW");
-	//W: 13500
+	InitializeSurpriseAttackTriggers();
 	
 
 	InitializeStartingEnemyUnits(vehicleBuilderAI);
@@ -151,11 +207,11 @@ bool NextWaypointReached()
 	LOCATION loc = waypointLocs[scriptGlobal.CurrentWaypointIndex];
 
 	vehicleCounter.Clear();
-	vehicleCounter.PullVehiclesFromPlayer(PlayerUnitEnum(Player1));
+	vehicleCounter.PullVehiclesFromPlayer(Player1);
 	int numberOfUnits = vehicleCounter.GetVehicleCount();
 
 	vehicleCounter.Clear();
-	vehicleCounter.PullVehiclesFromRectangle(Player1, InRectEnumerator(GetRectCenteredOnLoc(loc, 18)));
+	vehicleCounter.PullVehiclesFromRectangle(Player1, GetRectCenteredOnLoc(loc, 18));
 	int numberOfUnitsAtWaypoint = vehicleCounter.GetVehicleCount();
 
 	return numberOfUnits > 0 && numberOfUnits == numberOfUnitsAtWaypoint;
@@ -200,16 +256,20 @@ void MoveConvoyToCurrentWaypoint()
 	}
 }
 
+void FightGroupRespondToAttacked(FightGroup& fightGroup)
+{
+	if (fightGroup.IsInitialized() && fightGroup.HasBeenAttacked())
+	{
+		fightGroup.DoAttackEnemy();
+	}
+}
+
 void ForcePatrolsToCounterAttack()
 {
-	if (scriptGlobal.LynxPatrolFightGroup.HasBeenAttacked())
-	{
-		scriptGlobal.LynxPatrolFightGroup.DoAttackEnemy();
-	}
-	if (scriptGlobal.FirstPatrolFightGroup.HasBeenAttacked())
-	{
-		scriptGlobal.FirstPatrolFightGroup.DoAttackEnemy();
-	}
+	FightGroupRespondToAttacked(scriptGlobal.FirstPatrolFightGroup);
+	FightGroupRespondToAttacked(scriptGlobal.EastPatrolFightGroup);
+	FightGroupRespondToAttacked(scriptGlobal.CenterPatrolFightGroup);
+	FightGroupRespondToAttacked(scriptGlobal.WestPatrolFightGroup);
 }
 
 Export void AIProc()
@@ -233,7 +293,7 @@ Export void AIProc()
 
 		scriptGlobal.LastTickMoveWaypointSet = TethysGame::Tick();
 
-		if (!ReachedFinalWaypoint())
+		if (!scriptGlobal.Multiplayer && !ReachedFinalWaypoint())
 		{
 			MoveConvoyToCurrentWaypoint();
 		}
@@ -244,41 +304,7 @@ Export void AIProc()
 	}
 }
 
-void SetMultipleResearchedTechs(int playerNumb, std::vector<int> completedResearch)
-{
-	for (int techID : completedResearch)
-	{
-		Player[0].MarkResearchComplete(techID);
-	}
-}
 
-void SetResearchedTech()
-{
-	std::vector<int> researchedTech{
-		//05052, // Garage
-		2701, 2702, 2703, 2704, 2705,
-		2706, // Cryptology
-		2707, // Vehicle Encryption Patch
-		3401, // Cybernetic Teleoperation
-		3406, 3301, 3408, 7206, 7103, 8307, 5305,
-		3303, 3402, 3405, 3302, 3304, 3305, 3201, 3202, 3901, 3306, 3851, 5110, 5201, 5202, 5111, 5317, 5508, 5116, 5599, 5307,
-		7102, // Explosive Charges
-		8203, // High-Powered Explosives
-		8306, // Enhanced Defensive Fortifications
-		8309, // Reinforced Panther Construction
-		10303, // Advanced Armoring Systems
-
-		7212, //Extended Range Projectile Launcher
-		10306 //Grenade Loading Mechanism
-	};
-
-	if (Player[0].Difficulty() == PlayerDifficulty::DiffEasy)
-	{
-		//researchedTech.push_back(8320); //Reduced Foam Evaporation	
-	}
-
-	SetMultipleResearchedTechs(0, researchedTech);
-}
 
 Export void CreateDisaster()
 {

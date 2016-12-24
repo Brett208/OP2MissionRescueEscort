@@ -16,17 +16,22 @@ void CreateTimeVictoryCondition(Trigger& trigger, Trigger& victoryTrigger, int t
 bool IsScenarioLost()
 {
 	vehicleCounter.Clear();
-	vehicleCounter.PullVehiclesFromPlayer(PlayerUnitEnum(Player1));
+	vehicleCounter.PullVehiclesFromPlayer(Player1);
 
-	if (vehicleCounter.GetCombatVehicleCount() < scriptGlobal.MinConvoySurvivingUnits)
-	{
+	if (vehicleCounter.NonCombatVehicleCount() < scriptGlobal.MinConvoySurvivingUnits)
 		return true;
-	}
 
 	if (vehicleCounter.GetVehicleCount(map_id::mapEvacuationTransport) < scriptGlobal.MinEvacuationTransports)
-	{
 		return true;
-	}
+
+	if (!vehicleCounter.AllConVecsHaveKits())
+		return true;
+
+	if (!vehicleCounter.AllTrucksHaveCargo())
+		return true;
+
+	if (ExtPlayer[1].GetNumBuildingsBuilt() > 0)
+		return true;
 
 	return false;
 }
@@ -34,59 +39,29 @@ bool IsScenarioLost()
 bool IsScenarioWon()
 {
 	vehicleCounter.Clear();
-	vehicleCounter.PullVehiclesFromPlayer(PlayerUnitEnum(Player1));
-	int convoyVehicleCount = vehicleCounter.GetCombatVehicleCount();
+	vehicleCounter.PullVehiclesFromPlayer(Player1);
+	int convoyVehicleCount = vehicleCounter.CombatVehicleCount();
 
 
 	vehicleCounter.Clear();
 	MAP_RECT convoyFinishRect(LOCATION(X_, Y_), LOCATION(X_, Y_));
-	vehicleCounter.PullVehiclesFromRectangle(Player1, InRectEnumerator(convoyFinishRect));
+	vehicleCounter.PullVehiclesFromRectangle(Player1, convoyFinishRect);
 
 	//Check if all remaining convoy vehicles have made it to the objective area.
 	return vehicleCounter.GetVehicleCount() == convoyVehicleCount;
-}
-
-char* FormatVictoryConditionMessage(PlayerDifficulty playerDifficulty)
-{
-	switch (playerDifficulty)
-	{
-	case PlayerDifficulty::DiffEasy:
-		return "Extract at least 2 evacuation transports and 50% of starting convoy units. Leave no functioning convoy unit behind.";
-	case PlayerDifficulty::DiffNormal:
-		return "Extract at least 3 evacuation transports and 70% of starting convoy units. Leave no functioning convoy unit behind.";
-	default:
-		return "Extract all evacuation transports and 80% of starting convoy units. Leave no functioning convoy unit behind.";
-	}
-}
-
-void SetVictoryConvoyCounts(PlayerDifficulty playerDifficulty, int initialConvoyVehicleCount)
-{
-	switch (playerDifficulty)
-	{
-	case PlayerDifficulty::DiffEasy:
-		scriptGlobal.MinConvoySurvivingUnits = (int)(initialConvoyVehicleCount * 0.5);
-		scriptGlobal.MinEvacuationTransports = 2;
-		return;
-	case PlayerDifficulty::DiffNormal:
-		scriptGlobal.MinConvoySurvivingUnits = (int)(initialConvoyVehicleCount * 0.7);
-		scriptGlobal.MinEvacuationTransports = 3;
-		return;
-	default:
-		scriptGlobal.MinConvoySurvivingUnits = (int)(initialConvoyVehicleCount * 0.8);
-		scriptGlobal.MinEvacuationTransports = 4;
-		return;
-	}
 }
 
 void InitializeVictoryConditions(int evacConvoyNonCombatVehicleCount)
 {
 	Trigger victoryTrigger;
 
-	PlayerDifficulty playerDifficulty = (PlayerDifficulty)Player[Player0].Difficulty();
-	SetVictoryConvoyCounts(playerDifficulty, evacConvoyNonCombatVehicleCount);
-	char* victoryConditionText = FormatVictoryConditionMessage(playerDifficulty);
+	scriptGlobal.MinConvoySurvivingUnits = (int)(evacConvoyNonCombatVehicleCount * 0.7);
+	scriptGlobal.MinEvacuationTransports = 3;
+
+	char* victoryConditionText = "Extract at least 3 evac transports and 70% of convoy non-combat units. Leave no functioning convoy unit behind.";
+	
 	CreateTimeVictoryCondition(scriptGlobal.TrigVictoryWaitTime, victoryTrigger, 90, victoryConditionText);
 
 	scriptGlobal.TrigFailureWaitTime = CreateTimeTrigger(false, false, 90, "NoResponseToTrigger");
 	CreateFailureCondition(true, true, scriptGlobal.TrigFailureWaitTime, "Ignored");
-}
+} 

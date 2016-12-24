@@ -82,4 +82,7 @@ namespace UnitHelper
 	bool VehicleInRectangle(MAP_RECT mapRect, int playerNumber);
 
 	UnitDirection GetRandomUnitDirection();
+
+	map_id GetRandomTankType(bool includeTigers = true);
+	map_id ChooseRepairVehicleType(bool isEden);
 }
