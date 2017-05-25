@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by RisingFromTheAshes.rc
+// Used by Resource.rc
 //
 #define IDR_MISSIONTEXT                 102
 #define IDB_PIC                         104

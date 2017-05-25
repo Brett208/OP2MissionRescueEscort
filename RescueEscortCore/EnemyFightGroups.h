@@ -10,21 +10,15 @@ UnitHelper::VehicleBuilder vehicleBuilderAI;
 int GetDifficultyLevel()
 {
 	if (scriptGlobal.Multiplayer)
-	{
 		return TethysGame::InitialUnits();
-	}
 
 	PlayerDifficulty playerDiff = (PlayerDifficulty)Player[Player0].Difficulty();
 
 	if (playerDiff == PlayerDifficulty::DiffEasy)
-	{
 		return 0;
-	}
 
 	if (playerDiff == PlayerDifficulty::DiffNormal)
-	{
 		return 4;
-	}
 
 	return 8;
 }
@@ -32,17 +26,17 @@ int GetDifficultyLevel()
 map_id turretsMix[]
 {
 	map_id::mapRailGun, 
-	map_id::mapEMP, 
+	map_id::mapNone, 
 	map_id::mapThorsHammer,
-	map_id::mapAcidCloud,
+	map_id::mapNone,
 	map_id::mapLaser,
 	map_id::mapEMP,
 	map_id::mapRailGun,
 	map_id::mapEMP,
 	map_id::mapLaser,
-	map_id::mapThorsHammer,
+	map_id::mapNone,
 	map_id::mapEMP,
-	map_id::mapThorsHammer,
+	map_id::mapNone,
 	map_id::mapAcidCloud
 };
 
@@ -50,29 +44,29 @@ map_id laserTurrets[]
 {
 	map_id::mapLaser,
 	map_id::mapLaser,
+	map_id::mapNone,
 	map_id::mapLaser,
 	map_id::mapLaser,
 	map_id::mapLaser,
 	map_id::mapLaser,
 	map_id::mapLaser,
+	map_id::mapNone,
 	map_id::mapLaser,
 	map_id::mapLaser,
-	map_id::mapLaser,
-	map_id::mapLaser,
-	map_id::mapLaser,
+	map_id::mapNone,
 	map_id::mapLaser
 };
 
 map_id turretsThors[]
 {
 	map_id::mapThorsHammer,
-	map_id::mapThorsHammer,
-	map_id::mapThorsHammer,
+	map_id::mapNone,
 	map_id::mapNone,
 	map_id::mapThorsHammer,
 	map_id::mapNone,
 	map_id::mapThorsHammer,
 	map_id::mapThorsHammer,
+	map_id::mapNone,
 	map_id::mapThorsHammer,
 	map_id::mapNone,
 	map_id::mapThorsHammer,
@@ -83,17 +77,17 @@ map_id turretsThors[]
 map_id turretsEmpRailGun[]
 {
 	map_id::mapRailGun,
+	map_id::mapNone,
 	map_id::mapEMP,
+	map_id::mapNone,
 	map_id::mapRailGun,
+	map_id::mapNone,
 	map_id::mapEMP,
+	map_id::mapNone,
 	map_id::mapRailGun,
+	map_id::mapNone,
 	map_id::mapEMP,
-	map_id::mapRailGun,
-	map_id::mapEMP,
-	map_id::mapRailGun,
-	map_id::mapEMP,
-	map_id::mapRailGun,
-	map_id::mapEMP,
+	map_id::mapNone,
 	map_id::mapRailGun
 };
 
@@ -101,16 +95,16 @@ map_id turrestAcidLaserEMP[]
 {
 	map_id::mapAcidCloud,
 	map_id::mapLaser,
+	map_id::mapNone,
+	map_id::mapNone,
 	map_id::mapEMP,
 	map_id::mapLaser,
+	map_id::mapNone,
+	map_id::mapNone,
 	map_id::mapAcidCloud,
-	map_id::mapLaser,
 	map_id::mapEMP,
-	map_id::mapLaser,
-	map_id::mapAcidCloud,
-	map_id::mapLaser,
-	map_id::mapEMP,
-	map_id::mapLaser,
+	map_id::mapNone,
+	map_id::mapNone,
 	map_id::mapAcidCloud
 };
 
@@ -119,9 +113,7 @@ void AddDifficultyTurrets(const map_id turretsIn[], std::vector<map_id>& turrets
 	for (int i = 0; i < GetDifficultyLevel() + 1; ++i)
 	{
 		if (turretsIn[i] == map_id::mapNone)
-		{
 			continue;
-		}
 
 		turretsOut.push_back(turretsIn[i]);
 	}

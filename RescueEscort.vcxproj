@@ -126,6 +126,9 @@ rem copy /Y "$(ProjectDir)PursuedTechTree.txt" "..\..\..\..\GameDownload\Outpost
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="briefing.rtf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
