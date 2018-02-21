@@ -43,7 +43,7 @@ std::array<map_id, turretArraySize> turretsMix
 	map_id::mapEMP,
 	map_id::mapNone,
 	map_id::mapRailGun,
-	map_id::mapNone
+	map_id::mapAcidCloud
 };
 
 std::array<map_id, turretArraySize> laserTurrets
@@ -90,7 +90,7 @@ std::array<map_id, turretArraySize> turretsEmpRailGun
 	map_id::mapNone,
 	map_id::mapRailGun,
 	map_id::mapNone,
-	map_id::mapNone,
+	map_id::mapRailGun,
 	map_id::mapNone,
 	map_id::mapEMP,
 	map_id::mapNone,
@@ -111,7 +111,7 @@ std::array<map_id, turretArraySize> turrestAcidLaserEMP
 	map_id::mapNone,
 	map_id::mapLaser,
 	map_id::mapNone,
-	map_id::mapNone,
+	map_id::mapEMP,
 };
 
 void AddDifficultyTurrets(const std::array<map_id, turretArraySize> turretsIn, std::vector<map_id>& turretsOut)
