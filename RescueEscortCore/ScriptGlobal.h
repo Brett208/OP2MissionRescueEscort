@@ -39,12 +39,8 @@ struct ScriptGlobal
 	FightGroup CenterPatrolFightGroup;
 	FightGroup WestPatrolFightGroup;
 	
-
 	int CurrentWaypointIndex;
 	int LastTickMoveWaypointSet;
-
-	
-
 };
 
 // Global instance of ScriptGlobal

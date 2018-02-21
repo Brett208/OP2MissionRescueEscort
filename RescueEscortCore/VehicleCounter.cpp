@@ -9,8 +9,7 @@ namespace UnitHelper
 
 		int count = 0;
 
-		for (int index : vehicleIndices)
-		{
+		for (int index : vehicleIndices) {
 			count += VehicleCountVector[index].Count;
 		}
 
@@ -21,8 +20,9 @@ namespace UnitHelper
 	{
 		int index = GetVehicleIndex(vehicleType, cargoType);
 
-		if (index == -1)
+		if (index == -1) {
 			return 0;
+		}
 
 		return VehicleCountVector[index].Count;
 	}
@@ -31,8 +31,9 @@ namespace UnitHelper
 	{
 		int index = GetTruckCargoIndex(truckCargo);
 
-		if (index == -1)
+		if (index == -1) {
 			return 0;
+		}
 
 		return truckCargoCountVector[index].Count;
 	}
@@ -69,8 +70,7 @@ namespace UnitHelper
 		UnitEx unit;
 		while (inRectEnumerator.GetNext(unit))
 		{
-			if ((playerNum != PlayerNum::PlayerAll) && (unit.OwnerID() != (int)playerNum))
-			{
+			if ((playerNum != PlayerNum::PlayerAll) && (unit.OwnerID() != (int)playerNum)) {
 				continue;
 			}
 
@@ -122,8 +122,9 @@ namespace UnitHelper
 	{
 		for (size_t i = 0; i < truckCargoCountVector.size(); ++i)
 		{
-			if (truckCargoCountVector[i].TruckCargo == truckCargo)
+			if (truckCargoCountVector[i].TruckCargo == truckCargo) {
 				return i;
+			}
 		}
 
 		return -1;
@@ -133,8 +134,7 @@ namespace UnitHelper
 	{
 		AddVehicleToVector(vehicleType, cargoType);
 
-		if (vehicleType == map_id::mapCargoTruck)
-		{
+		if (vehicleType == map_id::mapCargoTruck) {
 			AddTruckCargoToVector(truckCargo);
 		}
 
@@ -144,16 +144,20 @@ namespace UnitHelper
 
 		vehicleCount++;
 
-		if (vehicleType == map_id::mapConVec && cargoType == map_id::mapNone)
+		if (vehicleType == map_id::mapConVec && cargoType == map_id::mapNone) {
 			allConVecsHaveKits = false;
+		}
 
-		else if (vehicleType == map_id::mapCargoTruck && truckCargo == Truck_Cargo::truckEmpty)
+		else if (vehicleType == map_id::mapCargoTruck && truckCargo == Truck_Cargo::truckEmpty) {
 			allTrucksHaveCargo = false;
+		}
 
-		if (IsWeapon(cargoType))
+		if (IsWeapon(cargoType)) {
 			combatVehicleCount++;
-		else
+		}
+		else {
 			nonCombatVehicleCount++;
+		}
 	}
 
 	void VehicleCounter::AddVehicleToVector(map_id vehicleType, map_id cargoType)

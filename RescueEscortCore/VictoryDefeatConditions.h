@@ -18,20 +18,25 @@ bool IsScenarioLost()
 	vehicleCounter.Clear();
 	vehicleCounter.PullVehiclesFromPlayer(Player1);
 
-	if (vehicleCounter.NonCombatVehicleCount() < scriptGlobal.MinConvoySurvivingUnits)
+	if (vehicleCounter.NonCombatVehicleCount() < scriptGlobal.MinConvoySurvivingUnits) {
 		return true;
+	}
 
-	if (vehicleCounter.GetVehicleCount(map_id::mapEvacuationTransport) < scriptGlobal.MinEvacuationTransports)
+	if (vehicleCounter.GetVehicleCount(map_id::mapEvacuationTransport) < scriptGlobal.MinEvacuationTransports) {
 		return true;
+	}
 
-	if (!vehicleCounter.AllConVecsHaveKits())
+	if (!vehicleCounter.AllConVecsHaveKits()) {
 		return true;
+	}
 
-	if (!vehicleCounter.AllTrucksHaveCargo())
+	if (!vehicleCounter.AllTrucksHaveCargo()) {
 		return true;
+	}
 
-	if (ExtPlayer[1].GetNumBuildingsBuilt() > 0)
+	if (ExtPlayer[1].GetNumBuildingsBuilt() > 0) {
 		return true;
+	}
 
 	return false;
 }

@@ -32,8 +32,9 @@ int waypointMoveCheckTickInterval = 30;
 PlayerColor GetAIColor(bool allowBlack = false)
 {
 	int totalColors = 6;
-	if (allowBlack)
+	if (allowBlack) {
 		totalColors++;
+	}
 
 	std::vector<int> availableColors;
 	for (int i = 0; i < totalColors; ++i)
@@ -47,8 +48,9 @@ PlayerColor GetAIColor(bool allowBlack = false)
 			std::remove(availableColors.begin(), availableColors.end(), ExtPlayer[i].GetColorNumber()), availableColors.end());
 	}
 	
-	if (availableColors.size() == 0)
+	if (availableColors.size() == 0) {
 		return PlayerColor::PlayerBlue;
+	}
 
 	int colorIndex = TethysGame::GetRand(availableColors.size());
 
@@ -112,16 +114,14 @@ void InitializeScenario(bool multiplayer)
 
 	Player[0].CenterViewOn(167 + X_, 3 + Y_);
 
-	if (multiplayer)
-	{
+	if (multiplayer) {
 		Player[1].CenterViewOn(256 + X_, 25 + Y_);
 	}
 
 	Player[Player0].GoHuman();
 	Player[Player0].GoPlymouth();
 
-	if (!multiplayer)
-	{
+	if (!multiplayer) {
 		Player[Player0].SetColorNumber(PlayerColor::PlayerRed);
 	}
 
@@ -226,8 +226,7 @@ void TransitionNextWaypoint()
 {
 	scriptGlobal.CurrentWaypointIndex++;
 
-	if (ReachedFinalWaypoint())
-	{
+	if (ReachedFinalWaypoint()) {
 		return;
 	}
 
@@ -247,8 +246,7 @@ void MoveConvoyToCurrentWaypoint()
 	Unit unit;
 	while (playerVechicleEnum.GetNext(unit))
 	{
-		if (mapRect.Check(unit.Location()))
-		{
+		if (mapRect.Check(unit.Location())) {
 			continue;
 		}
 

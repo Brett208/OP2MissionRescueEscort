@@ -12,16 +12,19 @@ const size_t turretArraySize = 13;
 
 int GetDifficultyLevel()
 {
-	if (scriptGlobal.Multiplayer)
+	if (scriptGlobal.Multiplayer) {
 		return TethysGame::InitialUnits();
+	}
 
 	PlayerDifficulty playerDiff = (PlayerDifficulty)Player[Player0].Difficulty();
 
-	if (playerDiff == PlayerDifficulty::DiffEasy)
+	if (playerDiff == PlayerDifficulty::DiffEasy) {
 		return 4;
+	}
 
-	if (playerDiff == PlayerDifficulty::DiffNormal)
+	if (playerDiff == PlayerDifficulty::DiffNormal) {
 		return 8;
+	}
 
 	return 10;
 }
@@ -115,8 +118,9 @@ void AddDifficultyTurrets(const std::array<map_id, turretArraySize> turretsIn, s
 {
 	for (int i = 0; i < GetDifficultyLevel() + 1; ++i)
 	{
-		if (turretsIn[i] == map_id::mapNone)
+		if (turretsIn[i] == map_id::mapNone) {
 			continue;
+		}
 
 		turretsOut.push_back(turretsIn[i]);
 	}
@@ -125,6 +129,7 @@ void AddDifficultyTurrets(const std::array<map_id, turretArraySize> turretsIn, s
 void AddDifficultyTurrets(std::vector<map_id>& turretsOut)
 {
 	std::array<map_id, turretArraySize> turretsIn;
+
 	switch (TethysGame::GetRand(5))
 	{
 	case 0:
@@ -361,12 +366,10 @@ void CreatePatrolOrGuard(FightGroup& fightGroup, LOCATION* patrolLocs, int valid
 	std::vector<map_id> turrets;
 	AddDifficultyTurrets(turrets);
 
-	if (TethysGame::GetRand(2) == 0)
-	{
+	if (TethysGame::GetRand(2) == 0) {
 		CreatePatrol(fightGroup, patrolLocs, validPatrolPointCount, tankType, turrets);
 	}
-	else
-	{
+	else {
 		CreateGuard(fightGroup, guardRect, tankType, turrets);
 	}
 }
@@ -378,8 +381,9 @@ void InitializeStartingEnemyUnits(UnitHelper::VehicleBuilder& vehicleBuilderAI)
 
 	for (int i = 0; i < totalPatrolCount; ++i)
 	{
-		if (i == patrolToSkip)
+		if (i == patrolToSkip) {
 			continue;
+		}
 
 		switch (i)
 		{

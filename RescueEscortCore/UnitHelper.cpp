@@ -490,8 +490,9 @@ namespace UnitHelper
 	map_id GetRandomTankType(bool includeTigers)
 	{
 		int numberOfTanks = 2;
-		if (includeTigers)
+		if (includeTigers) {
 			numberOfTanks++;
+		}
 
 		int tankIndex = TethysGame::GetRand(numberOfTanks);
 

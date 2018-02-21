@@ -104,10 +104,12 @@ void SetRescueConvoyResearchedTech()
 
 	tech.insert(std::end(tech), std::begin(sharedTech), std::end(sharedTech));
 
-	if (Player[Player0].IsEden())
+	if (Player[Player0].IsEden()) {
 		tech.insert(std::end(tech), std::begin(edenTech), std::end(edenTech));
-	else
+	}
+	else {
 		tech.insert(std::end(tech), std::begin(plymouthTech), std::end(plymouthTech));
+	}
 
 	if (Player[Player0].Difficulty() == PlayerDifficulty::DiffEasy)
 	{
@@ -121,10 +123,12 @@ void SetEvacuationConvoyResearchedTech()
 {
 	std::vector<int> tech(sharedTech);
 
-	if (Player[Player1].IsEden())
+	if (Player[Player1].IsEden()) {
 		tech.insert(std::end(tech), std::begin(edenTech), std::end(edenTech));
-	else
+	}
+	else {
 		tech.insert(std::end(tech), std::begin(plymouthTech), std::end(plymouthTech));
+	}
 
 	SetMultipleResearchedTechs(Player1, tech);
 }

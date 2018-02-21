@@ -7,10 +7,12 @@
 
 int AdjustNumberOfVecs(int playerNum, int mediumNumber)
 {
-	if (Player[1].Difficulty() == PlayerDifficulty::DiffEasy)
+	if (Player[1].Difficulty() == PlayerDifficulty::DiffEasy) {
 		return mediumNumber++;
-	else if (Player[1].Difficulty() == PlayerDifficulty::DiffHard)
+	}
+	else if (Player[1].Difficulty() == PlayerDifficulty::DiffHard) {
 		mediumNumber--;
+	}
 
 	return mediumNumber;
 }
@@ -65,12 +67,10 @@ void InitializeRescueConvoy(bool isEden, bool multiplayer, UnitHelper::VehicleBu
 
 void InitializeEvacuationConvoyTurrets(bool isEden, std::array<map_id, 3>& turrets)
 {
-	if (isEden)
-	{
+	if (isEden) {
 		turrets = { map_id::mapLaser, map_id::mapRailGun, map_id::mapThorsHammer };
 	}
-	else
-	{
+	else {
 		turrets = { map_id::mapMicrowave, map_id::mapRPG, map_id::mapESG };
 	}
 }
@@ -88,8 +88,9 @@ void InitializeEvacuationConvoy(bool multiplayer, bool isEden, UnitHelper::Vehic
 	InitializeEvacuationConvoyTurrets(isEden, turrets);
 
 	int numberOfVehicles = 3;
-	if (multiplayer)
+	if (multiplayer) {
 		numberOfVehicles = AdjustNumberOfVecs(Player1, 2);
+	}
 
 	vehicleBuilderAI.CreateLineOfVehicles(units, startLoc, UnitDirection::South, 1, map_id::mapLynx, turrets[0], numberOfVehicles);
 	vehicleBuilderAI.CreateLineOfVehicles(units, startLoc + LOCATION(0, 3), UnitDirection::South, 1, map_id::mapLynx, turrets[1], numberOfVehicles);
