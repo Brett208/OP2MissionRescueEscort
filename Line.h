@@ -165,21 +165,3 @@ bool DoesPathEnterSafeArea(const LOCATION& pathStartLoc, const LOCATION& pathEnd
 
 	return false;
 }
-
-
-MAP_RECT DisasterHelper::GetRandMapRect(int rectWidth, int rectHeight)
-{
-	LOCATION firstRectLoc = GetRandLocOutsideSafeAreas();
-
-	if (firstRectLoc.x + rectWidth > mapWidth)
-	{
-		firstRectLoc.x = mapWidth - rectWidth;
-	}
-
-	if (firstRectLoc.y + rectHeight < mapHeight)
-	{
-		firstRectLoc.y = mapHeight - rectHeight;
-	}
-
-	return MAP_RECT(firstRectLoc, LOCATION(firstRectLoc.x + rectWidth, firstRectLoc.y + rectHeight));
-}

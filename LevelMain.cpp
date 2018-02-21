@@ -19,30 +19,3 @@ Export int InitProc()
 
 	return true; // Level loaded successfully
 }
-
-
-
-
-
-// Places a safeRectangle centered on all command centers currently in game.
-void AutoSetBaseSafeRects(int safeAreaWidth, int safeAreaHeight)
-{
-	for (int i = 0; i < TethysGame::NoPlayers(); i++)
-	{
-		PlayerBuildingEnum playerBuildingEnum(i, map_id::mapCommandCenter);
-
-		Unit unit;
-		while (playerBuildingEnum.GetNext(unit))
-		{
-			LOCATION loc = unit.Location();
-			MAP_RECT safeRect = MAP_RECT(loc.x - safeAreaWidth / 2, loc.y - safeAreaHeight / 2, loc.x + 30, loc.y + 30);
-
-			disasterHelper.AddSafeRect(safeRect);
-		}
-	}
-}
-
-
-
-//NOTE: Sets mapWidth as 512 instead of 256. MapWidth appears to be set correctly.
-//disasterHelper.SetMapProperties(GameMapEx::GetMapWidth(), GameMapEx::GetMapHeight(), false);
