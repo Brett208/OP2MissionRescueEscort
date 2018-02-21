@@ -69,4 +69,4 @@ void InitializeVictoryConditions(int evacConvoyNonCombatVehicleCount)
 
 	scriptGlobal.TrigFailureWaitTime = CreateTimeTrigger(false, false, 90, "NoResponseToTrigger");
 	CreateFailureCondition(true, true, scriptGlobal.TrigFailureWaitTime, "Ignored");
-} 
+}
