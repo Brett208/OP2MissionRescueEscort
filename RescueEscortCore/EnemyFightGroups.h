@@ -4,8 +4,11 @@
 #include "UnitHelper.h"
 #include "Outpost2DLL\Outpost2DLL.h"
 #include <vector>
+#include <array>
 
 UnitHelper::VehicleBuilder vehicleBuilderAI;
+
+const size_t turretArraySize = 13;
 
 int GetDifficultyLevel()
 {
@@ -15,100 +18,100 @@ int GetDifficultyLevel()
 	PlayerDifficulty playerDiff = (PlayerDifficulty)Player[Player0].Difficulty();
 
 	if (playerDiff == PlayerDifficulty::DiffEasy)
-		return 0;
-
-	if (playerDiff == PlayerDifficulty::DiffNormal)
 		return 4;
 
-	return 8;
+	if (playerDiff == PlayerDifficulty::DiffNormal)
+		return 8;
+
+	return 10;
 }
 
-map_id turretsMix[]
+std::array<map_id, turretArraySize> turretsMix
 {
-	map_id::mapRailGun, 
+	map_id::mapRailGun,
+	map_id::mapNone,
 	map_id::mapNone, 
 	map_id::mapThorsHammer,
 	map_id::mapNone,
+	map_id::mapNone,
+	map_id::mapNone,
 	map_id::mapLaser,
+	map_id::mapNone,
 	map_id::mapEMP,
+	map_id::mapNone,
 	map_id::mapRailGun,
-	map_id::mapEMP,
-	map_id::mapLaser,
-	map_id::mapNone,
-	map_id::mapEMP,
-	map_id::mapNone,
-	map_id::mapAcidCloud
+	map_id::mapNone
 };
 
-map_id laserTurrets[]
+std::array<map_id, turretArraySize> laserTurrets
 {
 	map_id::mapLaser,
 	map_id::mapLaser,
 	map_id::mapNone,
-	map_id::mapLaser,
-	map_id::mapLaser,
-	map_id::mapLaser,
+	map_id::mapNone,
 	map_id::mapLaser,
 	map_id::mapLaser,
 	map_id::mapNone,
 	map_id::mapLaser,
+	map_id::mapNone,
+	map_id::mapNone,
 	map_id::mapLaser,
 	map_id::mapNone,
 	map_id::mapLaser
 };
 
-map_id turretsThors[]
+std::array<map_id, turretArraySize> turretsThors
 {
 	map_id::mapThorsHammer,
 	map_id::mapNone,
 	map_id::mapNone,
 	map_id::mapThorsHammer,
 	map_id::mapNone,
-	map_id::mapThorsHammer,
-	map_id::mapThorsHammer,
 	map_id::mapNone,
 	map_id::mapThorsHammer,
 	map_id::mapNone,
 	map_id::mapThorsHammer,
+	map_id::mapNone,
+	map_id::mapNone,
 	map_id::mapNone,
 	map_id::mapThorsHammer
 };
 
-map_id turretsEmpRailGun[]
+std::array<map_id, turretArraySize> turretsEmpRailGun
 {
 	map_id::mapRailGun,
 	map_id::mapNone,
+	map_id::mapNone,
 	map_id::mapEMP,
+	map_id::mapNone,
 	map_id::mapNone,
 	map_id::mapRailGun,
 	map_id::mapNone,
-	map_id::mapEMP,
 	map_id::mapNone,
-	map_id::mapRailGun,
 	map_id::mapNone,
 	map_id::mapEMP,
 	map_id::mapNone,
-	map_id::mapRailGun
+	map_id::mapNone
 };
 
-map_id turrestAcidLaserEMP[]
+std::array<map_id, turretArraySize> turrestAcidLaserEMP
 {
 	map_id::mapAcidCloud,
+	map_id::mapNone,
 	map_id::mapLaser,
-	map_id::mapNone,
-	map_id::mapNone,
-	map_id::mapEMP,
-	map_id::mapLaser,
-	map_id::mapNone,
 	map_id::mapNone,
 	map_id::mapAcidCloud,
+	map_id::mapNone,
+	map_id::mapNone,
 	map_id::mapEMP,
 	map_id::mapNone,
 	map_id::mapNone,
-	map_id::mapAcidCloud
+	map_id::mapLaser,
+	map_id::mapNone,
+	map_id::mapNone,
 };
 
-void AddDifficultyTurrets(const map_id turretsIn[], std::vector<map_id>& turretsOut)
+void AddDifficultyTurrets(const std::array<map_id, turretArraySize> turretsIn, std::vector<map_id>& turretsOut)
 {
 	for (int i = 0; i < GetDifficultyLevel() + 1; ++i)
 	{
@@ -121,7 +124,7 @@ void AddDifficultyTurrets(const map_id turretsIn[], std::vector<map_id>& turrets
 
 void AddDifficultyTurrets(std::vector<map_id>& turretsOut)
 {
-	map_id* turretsIn;
+	std::array<map_id, turretArraySize> turretsIn;
 	switch (TethysGame::GetRand(5))
 	{
 	case 0:
