@@ -6,7 +6,7 @@
 #include "DisasterHelper.h"
 #include "Technology.h"
 #include "ScriptGlobal.h"
-#include "Outpost2DLL\Outpost2DLL.h"
+#include "Outpost2DLL/Outpost2DLL.h"
 #include <vector>
 #include <array>
 

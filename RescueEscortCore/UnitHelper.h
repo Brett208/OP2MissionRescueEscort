@@ -1,9 +1,8 @@
 #pragma once
 
-#include "OP2Helper\OP2Helper.h"
-#include "HFL\Source\HFL.h"
-#include "Outpost2DLL\Outpost2DLL.h"
-
+#include "OP2Helper/OP2Helper.h"
+#include "HFL/Source/HFL.h"
+#include "Outpost2DLL/Outpost2DLL.h"
 #include <vector>
 #include <functional>
 

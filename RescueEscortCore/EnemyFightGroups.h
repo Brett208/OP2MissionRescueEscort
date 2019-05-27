@@ -2,7 +2,7 @@
 
 #include "ScriptGlobal.h"
 #include "UnitHelper.h"
-#include "Outpost2DLL\Outpost2DLL.h"
+#include "Outpost2DLL/Outpost2DLL.h"
 #include <vector>
 #include <array>
 

@@ -3,7 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include "resource.h"
-#include "odasl\odasl.h"
+#include "odasl/odasl.h"
 #include <richedit.h>
 #include <windows.h>
 

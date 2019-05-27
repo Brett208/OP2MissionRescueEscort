@@ -1,8 +1,8 @@
 #pragma once
 
-#include "OP2Helper\ColonyType.h"
-#include "HFL\Source\HFL.h"
-#include "Outpost2DLL\Outpost2DLL.h"
+#include "OP2Helper/ColonyType.h"
+#include "HFL/Source/HFL.h"
+#include "Outpost2DLL/Outpost2DLL.h"
 #include <vector>
 
 //Note: Only PlayerBuildingEnum returns buildings, so do not try and use this class to count buildings.

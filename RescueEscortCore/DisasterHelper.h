@@ -2,8 +2,8 @@
 
 // Disaster Helper Version: 1.0
 
-#include "OP2Helper\OP2Helper.h"
-#include "Outpost2DLL\Outpost2DLL.h"
+#include "OP2Helper/OP2Helper.h"
+#include "Outpost2DLL/Outpost2DLL.h"
 #include <climits>
 #include <cmath>
 #include <vector>

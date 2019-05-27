@@ -1,7 +1,7 @@
 #pragma once
 
-#include "OP2Helper\OP2Helper.h"
-#include "Outpost2DLL\Outpost2DLL.h"
+#include "OP2Helper/OP2Helper.h"
+#include "Outpost2DLL/Outpost2DLL.h"
 #include <vector>
 
 void SetMultipleResearchedTechs(int playerNum, std::vector<TechID>& completedResearch);

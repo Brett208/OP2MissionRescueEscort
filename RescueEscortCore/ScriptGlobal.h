@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Outpost2DLL\Outpost2DLL.h"
+#include "Outpost2DLL/Outpost2DLL.h"
 
 struct ScriptGlobal
 {
