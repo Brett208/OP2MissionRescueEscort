@@ -51,8 +51,8 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <PostBuildEvent>
-      <Command>copy /Y "RescueEscort.map" "..\..\..\..\..\GameDownload\Outpost2\trunk\RescueEscort.map"
-copy /Y "PursuedTechTree.txt" "..\..\..\..\..\GameDownload\Outpost2\trunk\PursuedTechTree.txt"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,8 +70,8 @@ copy /Y "PursuedTechTree.txt" "..\..\..\..\..\GameDownload\Outpost2\trunk\Pursue
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "RescueEscort.map" "..\..\..\..\..\GameDownload\Outpost2\trunk\RescueEscort.map"
-copy /Y "PursuedTechTree.txt" "..\..\..\..\..\GameDownload\Outpost2\trunk\PursuedTechTree.txt"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
