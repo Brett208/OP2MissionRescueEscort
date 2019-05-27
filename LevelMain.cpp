@@ -11,8 +11,6 @@ static const bool Multiplayer = false; // Determines if the scenario is built as
 
 Export int InitProc()
 {
-	HFLInit();
-
 	ShowBriefing();
 
 	InitializeScenario(Multiplayer);
