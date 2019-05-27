@@ -3,7 +3,7 @@
 #include <Outpost2DLL/Outpost2DLL.h>
 
 // Required data exports  (Description, Map, TechTree, GameType, NumPlayers)
-ExportLevelDetailsEx("Campaign - Ply, Pursued, Ep 3 - Rescue Escort", "RescueEscort.map", "PursuedTechTree.txt", MissionTypes::Colony, 3, 12, true);
+ExportLevelDetailsFull("Campaign - Ply, Pursued, Ep 3 - Rescue Escort", "RescueEscort.map", "PursuedTechTree.txt", MissionTypes::Colony, 3, 12, true);
 
 extern void ShowBriefing();
 
