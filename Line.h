@@ -150,7 +150,7 @@ bool DoesPathEnterSafeArea(const LOCATION& pathStartLoc, const LOCATION& pathEnd
 		}
 	}
 
-	for (size_t i = 0; i < locsOnLine.size(); i = i + 3)
+	for (std::size_t i = 0; i < locsOnLine.size(); i = i + 3)
 	{
 		LOCATION loc = locsOnLine[i];
 

@@ -8,7 +8,7 @@
 
 UnitHelper::VehicleBuilder vehicleBuilderAI;
 
-const size_t turretArraySize = 13;
+const std::size_t turretArraySize = 13;
 
 int GetDifficultyLevel()
 {

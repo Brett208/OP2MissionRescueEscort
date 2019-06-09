@@ -125,7 +125,7 @@ namespace UnitHelper
 		Unit unit;
 		LOCATION currentLoc = startLoc;
 
-		for (size_t i = 0; i < cargoVector.size(); ++i)
+		for (std::size_t i = 0; i < cargoVector.size(); ++i)
 		{
 			CreateVechLightsOn(unit, vehicleType, currentLoc, cargoVector[i]);
 			units.push_back(unit);
@@ -141,7 +141,7 @@ namespace UnitHelper
 
 		Unit unit;
 		LOCATION currentLoc = startLoc;
-		for (size_t i = 0; i < vehicleTypes.size(); ++i)
+		for (std::size_t i = 0; i < vehicleTypes.size(); ++i)
 		{
 			CreateVechLightsOn(unit, vehicleTypes[i], currentLoc, map_id::mapNone);
 			units.push_back(unit);
@@ -156,7 +156,7 @@ namespace UnitHelper
 		UnitDirection startingUnitDirection = unitDirection;
 		Unit unit;
 
-		for (size_t i = 0; i < cargoTypes.size(); ++i)
+		for (std::size_t i = 0; i < cargoTypes.size(); ++i)
 		{
 			unitDirection = (UnitDirection)TethysGame::GetRand(8);
 			CreateVechLightsOn(unit, vehicleType, mapRect.RandPt(), cargoTypes[i]);
@@ -182,7 +182,7 @@ namespace UnitHelper
 		UnitDirection startingUnitDirection = unitDirection;
 		Unit truck;
 
-		for (size_t i = 0; i < amounts.size(); ++i)
+		for (std::size_t i = 0; i < amounts.size(); ++i)
 		{
 			unitDirection = (UnitDirection)TethysGame::GetRand(8);
 			CreateVechLightsOn(truck, map_id::mapCargoTruck, mapRect.RandPt(), map_id::mapNone);
@@ -205,7 +205,7 @@ namespace UnitHelper
 
 		Unit unit;
 		LOCATION currentLoc = startLoc;
-		for (size_t i = 0; i < cargoTypes.size(); ++i)
+		for (std::size_t i = 0; i < cargoTypes.size(); ++i)
 		{
 			CreateVechLightsOn(unit, map_id::mapCargoTruck, currentLoc, map_id::mapNone);
 			unit.SetTruckCargo(cargoTypes[i], 1000);

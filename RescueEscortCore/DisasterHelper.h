@@ -121,7 +121,7 @@ public:
 		}
 	}
 
-	template<typename MAP_RECT, size_t N>
+	template<typename MAP_RECT, std::size_t N>
 	void AddSafeRects(const std::array<MAP_RECT, N>& safeRects)
 	{
 		this->safeRects.insert(this->safeRects.end(), safeRects.begin(), safeRects.end());
